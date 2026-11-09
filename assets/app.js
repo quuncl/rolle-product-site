@@ -196,9 +196,20 @@ const cfg={brand:'YOUR BRAND',ink:'#252923',surface:'kraft',density:2,logo:null,
 const densityNames={1:'Редкий',2:'Средний',3:'Частый'};
 function repeatNode(){
   const container = $('#previewRepeat');
-  const available = container.parentElement.clientWidth;
+  const band = container.parentElement;
+  const board = $('#previewBoard');
+  band.style.left = '4%';
+  band.style.width = '92%';
+  band.style.top = '50%';
+  band.style.height = 'auto';
+  band.style.transform = 'translateY(-50%)';
+  band.style.overflow = 'hidden';
+  const available = board.clientWidth ? band.clientWidth : 0;
   container.replaceChildren();
   container.style.fontSize = '';
+  container.style.width = 'max-content';
+  container.style.maxWidth = '100%';
+  container.style.marginInline = 'auto';
   const gap = cfg.density === 1 ? 48 : cfg.density === 2 ? 28 : 12;
   container.style.gap = gap + 'px';
   if (!available) return;
@@ -227,11 +238,15 @@ function repeatNode(){
     itemWidth = probe.offsetWidth;
   }
   probe.remove();
+  if (!itemWidth) return;
 
   let used = 0;
   while (used + itemWidth <= available + 1 && container.childElementCount < 8){
     container.append(addCopy());
     used += itemWidth + gap;
+  }
+  while (container.childElementCount > 1 && container.scrollWidth > available + 1){
+    container.lastElementChild.remove();
   }
 }
 function renderConfig(){const board=$('#previewBoard');board.dataset.surface=cfg.surface;$('#previewBand').style.setProperty('--ink',cfg.ink);repeatNode();$('#densityValue').textContent=densityNames[cfg.density];}
