@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#161617" />
+  <meta name="description" content="ROLLÉ — персональный роллер для фирменной упаковки. Посмотрите 3D-модель, попробуйте печать и создайте свой дизайн." />
+  <meta property="og:title" content="ROLLÉ — ваш бренд одним движением" />
+  <meta property="og:description" content="Интерактивная 3D-презентация роллера для брендирования упаковки." />
+  <title>ROLLÉ — оставьте свой след.</title>
+  <link rel="icon" type="image/svg+xml" href="./assets/images/rolle-mark.svg" />
+  <link rel="stylesheet" href="./assets/styles.css" />
+  <script defer src="./assets/app.js"></script>
+</head>
+<body>
+  <div id="scroll-progress" class="scroll-progress" aria-hidden="true"></div>
+  <header class="site-header" id="top">
+    <a class="brand" href="#top" aria-label="ROLLÉ, на главную"><img src="./assets/images/rolle-logo.svg" width="128" height="36" alt="ROLLÉ" /></a>
+    <nav class="desktop-nav" aria-label="Основная навигация">
+      <a href="#product">Продукт</a><a href="#demo">Как работает</a><a href="#customizer">Конструктор</a><a href="#details">Результат</a>
+    </nav>
+    <div class="header-actions"><a class="btn btn-header" href="#customizer">Собрать оттиск <span aria-hidden="true">↗</span></a></div>
+    <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню" aria-controls="mobileMenu" aria-expanded="false">☰</button>
+  </header>
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Мобильная навигация"><a href="#product">Продукт</a><a href="#demo">Как работает</a><a href="#customizer">Конструктор</a><a href="#details">Результат</a></nav>
+
+  <main>
+    <div class="hero-story" id="hero">
+    <section class="hero section-pad">
+      <div class="hero-copy">
+        <p class="hero-kicker"><img src="./assets/images/rolle-logo.svg" width="128" height="36" alt="ROLLÉ" /></p>
+        <h1>Ваш бренд.<br>Одним движением.</h1>
+        <p class="hero-lead">Ручной роллер со сменным клише для бумаги и картона.</p>
+      </div>
+      <div class="hero-visual hero-photo-stage">
+        <img class="hero-product-photo" id="heroProductPhoto" src="./assets/images/roller-smooth-side.webp"
+          width="941" height="1672" alt="Прототип роллера ROLLÉ, вид сбоку" fetchpriority="high" decoding="async" />
+        <img class="hero-product-photo hero-product-photo-front" id="heroProductPhotoFront"
+          src="./assets/images/roller-smooth-front.webp" width="941" height="1672"
+          alt="" aria-hidden="true" decoding="async" />
+        <svg class="hero-wheel hero-wheel-side" viewBox="0 0 941 1672" aria-hidden="true">
+          <defs>
+            <clipPath id="heroWheelRim">
+              <path d="M208 345C186 243 233 111 312 61C417 -9 552 5 648 80C735 148 770 260 720 371C689 438 642 478 593 499L586 452C628 412 646 348 638 273C625 164 557 100 465 89C350 74 254 159 252 282C250 329 261 379 277 407L275 455C241 433 220 391 208 345Z" />
+            </clipPath>
+            <radialGradient id="heroRimFade" gradientUnits="userSpaceOnUse" cx="470" cy="268" r="281">
+              <stop offset=".69" stop-color="white" stop-opacity="0" />
+              <stop offset=".85" stop-color="white" />
+              <stop offset="1" stop-color="white" />
+            </radialGradient>
+            <mask id="heroRimMask" maskUnits="userSpaceOnUse" x="190" y="0" width="570" height="520">
+              <rect x="190" width="570" height="520" fill="url(#heroRimFade)" />
+            </mask>
+          </defs>
+          <g clip-path="url(#heroWheelRim)" mask="url(#heroRimMask)">
+            <image class="hero-wheel-disc" href="./assets/images/roller-print-wheel.webp" x="176" y="-23" width="588" height="582" />
+          </g>
+        </svg>
+        <svg class="hero-wheel hero-wheel-front" viewBox="0 0 941 1672" aria-hidden="true">
+          <defs>
+            <image id="heroTreadTexture" href="./assets/images/roller-smooth-front.webp"
+              x="-320" y="-130" width="941" height="1672" />
+            <linearGradient id="heroTreadTileFade" x2="0" y2="1">
+              <stop stop-color="white" stop-opacity="0" />
+              <stop offset=".23" stop-color="white" />
+              <stop offset=".77" stop-color="white" />
+              <stop offset="1" stop-color="white" stop-opacity="0" />
+            </linearGradient>
+            <mask id="heroTreadTileMask" maskUnits="userSpaceOnUse" x="0" y="0" width="294" height="470">
+              <rect width="294" height="470" fill="url(#heroTreadTileFade)" />
+            </mask>
+            <pattern id="heroWheelTreadBase" x="320" y="-105" width="294" height="470" patternUnits="userSpaceOnUse">
+              <use href="#heroTreadTexture" />
+              <animateTransform attributeName="patternTransform" type="translate" from="0 0" to="0 470" dur="3.8s" repeatCount="indefinite" />
+            </pattern>
+            <pattern id="heroWheelTread" x="320" y="130" width="294" height="470" patternUnits="userSpaceOnUse">
+              <use href="#heroTreadTexture" mask="url(#heroTreadTileMask)" />
+              <animateTransform attributeName="patternTransform" type="translate" from="0 0" to="0 470" dur="3.8s" repeatCount="indefinite" />
+            </pattern>
+            <linearGradient id="heroTreadFade" x2="0" y2="1">
+              <stop stop-color="white" stop-opacity="0" />
+              <stop offset=".18" stop-color="white" />
+              <stop offset=".76" stop-color="white" />
+              <stop offset="1" stop-color="white" stop-opacity="0" />
+            </linearGradient>
+            <mask id="heroTreadMask" maskUnits="userSpaceOnUse" x="320" y="100" width="294" height="530">
+              <rect x="320" y="100" width="294" height="530" rx="20" fill="url(#heroTreadFade)" />
+            </mask>
+          </defs>
+          <g mask="url(#heroTreadMask)">
+            <rect x="320" y="100" width="294" height="530" fill="url(#heroWheelTreadBase)" />
+            <rect x="320" y="100" width="294" height="530" fill="url(#heroWheelTread)" />
+          </g>
+        </svg>
+      </div>
+      <svg class="roller-color-filter" width="0" height="0" aria-hidden="true">
+        <defs>
+          <filter id="rollerBodyColor" color-interpolation-filters="sRGB">
+            <feColorMatrix in="SourceGraphic" result="blueMask" type="matrix"
+              values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -8 0 8 0 -.28" />
+            <feColorMatrix id="rollerBodyTint" in="SourceGraphic" result="tint" type="matrix" />
+            <feComposite in="tint" in2="blueMask" operator="in" result="body" />
+            <feComposite in="body" in2="SourceGraphic" operator="over" />
+          </filter>
+        </defs>
+      </svg>
+      <div class="hero-actions">
+        <div class="roller-preview-settings">
+          <fieldset class="roller-colors">
+            <legend>Цвет корпуса</legend>
+            <div class="roller-color-options">
+              <label title="Синий" style="--sample:#494db0"><input type="radio" name="roller-color" value="blue" aria-label="Синий" checked><span></span></label>
+              <label title="Чёрный" style="--sample:#28282c"><input type="radio" name="roller-color" value="black" aria-label="Чёрный"><span></span></label>
+              <label title="Жёлтый" style="--sample:#f5c535"><input type="radio" name="roller-color" value="yellow" aria-label="Жёлтый"><span></span></label>
+              <label title="Зелёный" style="--sample:#42a65e"><input type="radio" name="roller-color" value="green" aria-label="Зелёный"><span></span></label>
+              <label title="Белый" style="--sample:#f5f5f7"><input type="radio" name="roller-color" value="white" aria-label="Белый"><span></span></label>
+            </div>
+            <output class="roller-color-name" id="rollerColorName">Синий</output>
+          </fieldset>
+          <fieldset class="roller-background">
+            <legend>Фон предпросмотра</legend>
+            <div class="roller-background-options">
+              <label><input type="radio" name="roller-background" value="dark" checked><span>Тёмный</span></label>
+              <label><input type="radio" name="roller-background" value="light"><span>Светлый</span></label>
+            </div>
+          </fieldset>
+        </div>
+        <div class="hero-ctas">
+          <a href="#customizer" class="btn btn-accent">Собрать оттиск</a>
+          <a href="#demo" class="text-link">Посмотреть печать <span aria-hidden="true">›</span></a>
+        </div>
+        <p class="hero-caption">Визуализация цвета <span aria-hidden="true">·</span> Прокрутите, чтобы рассмотреть</p>
+      </div>
+      <div class="hero-story-progress" aria-hidden="true"></div>
+    </section>
+    </div>
+
+    <section class="manifesto section-pad" id="product">
+      <div class="section-index">О ПРОДУКТЕ</div>
+      <div class="manifesto-grid">
+        <h2 class="display-heading">Один проход.<br>Целая линия оттиска.</h2>
+        <div class="manifesto-copy">
+          <p>Прокатите роллер вдоль края коробки или поперёк бумажного пакета. Ваш рисунок повторится по всей длине прохода.</p>
+          <a class="section-link" href="#demo">Посмотреть демонстрацию <span aria-hidden="true">↘</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="engineering section-pad" id="engineering">
+      <div class="engineering-copy">
+        <h2 class="display-heading">Устройство роллера</h2>
+        <p>Маркер подаёт краску на рельефное клише. При прокатке клише переносит рисунок на упаковку.</p>
+      </div>
+      <div class="engineering-scene engineering-photo-stage">
+        <img class="engineering-product-photo" id="engineeringPhoto" src="./assets/images/roller-smooth-side.webp"
+          width="941" height="1672" alt="Синий прототип роллера, вид сбоку" loading="lazy" decoding="async" />
+        <img class="engineering-product-photo engineering-product-photo-front" id="engineeringPhotoFront"
+          src="./assets/images/roller-smooth-front.webp" width="941" height="1672" alt="" aria-hidden="true" loading="lazy" decoding="async" />
+      </div>
+      <p class="engineering-photo-caption">Синий прототип. Ракурс меняется при прокрутке.</p>
+      <!-- Галерея прототипа временно скрыта.
+      <div class="prototype-gallery">
+        <div class="prototype-gallery-heading">
+          <h3>Из чего собран прототип</h3>
+          <p>Корпус, подача краски и сменное клише крупным планом.</p>
+        </div>
+
+        <figure class="prototype-feature">
+          <img src="./assets/images/prototype-open-body.webp" alt="Синий корпус со снятой рукояткой и маркером внутри" loading="lazy" decoding="async" />
+          <figcaption><strong>Корпус и рукоятка</strong><span>Маркер размещается внутри корпуса. Съёмная рукоятка закрывает его снаружи.</span></figcaption>
+        </figure>
+
+        <div class="prototype-details">
+          <figure>
+            <div class="prototype-views">
+              <img src="./assets/images/prototype-marker.webp" alt="Корпус, снятая рукоятка и маркер с красным наконечником" loading="lazy" decoding="async" />
+              <img src="./assets/images/prototype-marker-top.webp" alt="Корпус и маркер рядом, вид сверху" loading="lazy" decoding="async" />
+            </div>
+            <figcaption><strong>Маркер</strong><span>Подаёт краску на рельеф клише.</span></figcaption>
+          </figure>
+          <figure>
+            <div class="prototype-views">
+              <img src="./assets/images/prototype-mount.webp" alt="Вилка крепления колеса с квадратным проёмом" loading="lazy" decoding="async" />
+              <img src="./assets/images/prototype-axle.webp" alt="Синий штифт оси колеса" loading="lazy" decoding="async" />
+            </div>
+            <figcaption><strong>Крепление и ось</strong><span>Ось удерживает колесо между боковинами корпуса.</span></figcaption>
+          </figure>
+          <figure>
+            <div class="prototype-views">
+              <img src="./assets/images/prototype-wheel.webp" alt="Печатное колесо, вид на рельефную поверхность" loading="lazy" decoding="async" />
+              <img src="./assets/images/prototype-wheel-face.webp" alt="Печатное колесо с синей ступицей и отверстием для оси" loading="lazy" decoding="async" />
+            </div>
+            <figcaption><strong>Сменное клише</strong><span>Рельеф по окружности оставляет повторяющийся оттиск.</span></figcaption>
+          </figure>
+        </div>
+      </div>
+      -->
+    </section>
+
+    <section class="how section-pad" id="demo">
+      <div class="section-index">Печать на упаковке</div>
+      <div class="how-head"><h2 class="display-heading">Проведите.<br>Посмотрите на результат.</h2><p>Выберите цвет и прокатите роллер, чтобы увидеть, как на крафт-картоне появляется повторяющийся рисунок.</p></div>
+      <div class="demo-workspace">
+        
+        <div class="craft-board" id="craftBoard">
+          <div class="craft-pattern"></div>
+          <div class="print-path" id="printPath"><div class="print-content" id="printContent"></div></div>
+          <div class="demo-roller" id="demoRoller" aria-hidden="true">
+            <img class="demo-wheel-spin" src="./assets/images/roller-print-wheel.webp" width="1254" height="1254" alt="" decoding="async" />
+            <svg class="demo-product" viewBox="0 0 941 1672" aria-hidden="true">
+              <defs>
+                <mask id="demoHousingMask" maskUnits="userSpaceOnUse" x="0" y="0" width="941" height="1672">
+                  <rect width="941" height="1672" fill="white" />
+                  <ellipse cx="470" cy="267" rx="276" ry="256" fill="black" />
+                  <ellipse cx="444" cy="280" rx="191" ry="190" fill="white" />
+                  <path d="M270 565 275 321C264 230 304 165 379 150 462 129 535 183 558 266L587 576Z" fill="white" />
+                  <path d="M620 440 660 451 671 580 617 583Z" fill="white" />
+                  <rect y="558" width="941" height="1114" fill="white" />
+                </mask>
+              </defs>
+              <image href="./assets/images/roller-smooth-side.webp" width="941" height="1672" mask="url(#demoHousingMask)" />
+            </svg>
+          </div>
+          
+        </div>
+        <div class="demo-controls"><div class="color-control"><span class="control-label">ЦВЕТ ОТПЕЧАТКА</span><div class="swatches" id="demoSwatches"><button class="swatch active" data-ink="#262924" style="--swatch:#262924" aria-label="Чёрный" title="Чёрный"></button><button class="swatch" data-ink="#ce503f" style="--swatch:#ce503f" aria-label="Красный" title="Красный"></button><button class="swatch" data-ink="#346a9f" style="--swatch:#346a9f" aria-label="Синий" title="Синий"></button><button class="swatch light-swatch" data-ink="#f8f6e9" style="--swatch:#f8f6e9" aria-label="Белый" title="Белый"></button><button class="swatch" data-ink="#b68d3a" style="--swatch:#b68d3a" aria-label="Золотой" title="Золотой"></button></div></div><button class="btn btn-dark" id="runDemo">Прокатить роллер <span>↗</span></button></div>
+      </div>
+      <p class="demo-status" id="demoStatus" role="status">Нажмите «Прокатить роллер», чтобы начать.</p>
+      <p class="demo-disclaimer">Демонстрация иллюстрирует принцип непрерывной печати. Финальная чёткость и доступные цвета зависят от материала клише, маркера и поверхности.</p>
+    </section>
+
+    <section class="features section-pad" id="benefits">
+      <div class="section-index light">Ваш рисунок. Ваша упаковка.</div>
+      <div class="feature-intro"><h2 class="display-heading">Три составляющие оттиска</h2></div>
+      <div class="feature-cards">
+        <article class="feature-card">
+          <h3>Сменное клише</h3>
+          <p>Название, логотип или узор повторяются вдоль всей линии прокатки.</p>
+        </article>
+        <article class="feature-card">
+          <h3>Сменный маркер</h3>
+          <p>В конструкторе можно сравнить цвета оттиска на светлой и тёмной основе.</p>
+        </article>
+        <article class="feature-card">
+          <h3>Бумага и картон</h3>
+          <p>Рисунок можно примерить на коробках, бумажных пакетах и бирках.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="builder section-pad" id="customizer">
+      <div class="builder-title">
+        <h2 class="display-heading">Теперь — с вашим именем.</h2>
+        <p>Примерьте свой логотип или название на бумаге и картоне.</p>
+      </div>
+      <div class="builder-shell">
+        <div class="builder-preview">
+          <div class="preview-stage">
+            <div class="preview-board" id="previewBoard">
+              <div class="preview-band" id="previewBand"><div class="preview-repeat" id="previewRepeat"></div></div>
+            </div>
+          </div>
+          <div class="preview-footer">
+            <span>Предпросмотр оттиска</span>
+            <button type="button" id="downloadSvg" class="inline-action">Скачать SVG <span aria-hidden="true">↓</span></button>
+          </div>
+        </div>
+        <div class="builder-panel">
+          <label for="brandInput" class="field-label">Название бренда</label>
+          <input id="brandInput" class="brand-input" value="YOUR BRAND" maxlength="22" spellcheck="false" aria-describedby="brandHelp" />
+          <small id="brandHelp">До 22 символов</small>
+          <label for="logoUpload" class="file-input-label">Загрузить логотип <span>PNG, JPG, SVG</span><input type="file" id="logoUpload" accept="image/png,image/jpeg,image/svg+xml" /></label>
+          <button type="button" class="reset-logo" id="resetLogo" hidden>Убрать логотип</button>
+
+          <div class="field-label" id="inkLabel">Цвет печати</div>
+          <div class="builder-colors" id="builderSwatches" role="group" aria-labelledby="inkLabel">
+            <button type="button" class="builder-swatch active" style="--swatch:#252923" data-color="#252923" aria-pressed="true" aria-label="Чёрный" title="Чёрный"><span></span></button>
+            <button type="button" class="builder-swatch" style="--swatch:#ce503f" data-color="#ce503f" aria-pressed="false" aria-label="Красный" title="Красный"><span></span></button>
+            <button type="button" class="builder-swatch" style="--swatch:#f8f6e9" data-color="#f8f6e9" aria-pressed="false" aria-label="Белый" title="Белый"><span></span></button>
+            <button type="button" class="builder-swatch" style="--swatch:#b68d3a" data-color="#b68d3a" aria-pressed="false" aria-label="Золотой" title="Золотой"><span></span></button>
+          </div>
+
+          <div class="field-label" id="surfaceLabel">Материал</div>
+          <div class="surface-switch" role="group" aria-labelledby="surfaceLabel">
+            <button type="button" data-surface="kraft" class="active" aria-pressed="true">Крафт</button>
+            <button type="button" data-surface="white" aria-pressed="false">Белая бумага</button>
+            <button type="button" data-surface="dark" aria-pressed="false">Тёмный картон</button>
+          </div>
+
+          <label for="densityRange" class="field-label">Интервал повторения <span id="densityValue">Средний</span></label>
+          <input id="densityRange" type="range" min="1" max="3" value="2" step="1" />
+          <button class="btn btn-accent btn-full" id="requestBtn" type="button">Подготовить заявку</button>
+          <p class="micro-note">Сохраните конфигурацию для обсуждения с производителем.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="transformation section-pad" id="details"><div class="section-index light">ДО / ПОСЛЕ</div><div class="trans-head"><h2 class="display-heading">Коробка до и после</h2><p>Передвиньте разделитель, чтобы сравнить чистый картон и упаковку с оттиском.</p></div><div class="compare" id="compare" aria-label="Сравнение коробки до и после брендирования"><div class="compare-base"><div class="package-scene"><div class="package-face"><span class="package-noise"></span></div><span class="package-top"></span><span class="package-side"></span></div><span class="comparison-label after">С БРЕНДИРОВАНИЕМ</span></div><div class="compare-before" id="compareBefore"><div class="package-scene"><div class="package-face"><span class="package-noise"></span></div><span class="package-top"></span><span class="package-side"></span></div><span class="comparison-label before">ДО</span></div><div class="compare-divider" id="compareDivider"><span>↔</span></div><input id="compareRange" type="range" min="5" max="95" value="50" aria-label="Показать до и после" /></div></section>
+
+    <section class="faq section-pad"><div class="section-index">ВОПРОСЫ И ОТВЕТЫ</div><div class="faq-grid"><h2 class="display-heading">Частые вопросы</h2><div class="faq-list"><details><summary>Можно ли нанести свой логотип? <span>+</span></summary><p>Да, предполагается изготовление персонального сменного клише. Перед производством файл нужно проверить на толщину линий и читаемость.</p></details><details><summary>На каких поверхностях работает роллер? <span>+</span></summary><p>Прежде всего на бумаге и картоне, если выбранный маркер подходит материалу. Глянцевые, ламинированные и пластиковые поверхности требуют отдельных испытаний.</p></details><details><summary>Можно ли менять цвет? <span>+</span></summary><p>Конструкция предусматривает смену маркера. Перед сменой цвета клише необходимо очистить и проверить совместимость краски.</p></details><details><summary>На фотографиях готовое изделие? <span>+</span></summary><p>На фотографиях показан прототип с удалённым фоном. Окончательные материалы, параметры и качество печати будут подтверждены после испытаний.</p></details></div></div></section>
+
+    <section class="final-cta section-pad">
+      <h2>Примерьте свой логотип</h2>
+      <a href="#customizer" class="btn btn-dark">Открыть конструктор <span aria-hidden="true">↗</span></a>
+    </section>
+  </main>
+  <footer class="site-footer"><a class="brand" href="#top" aria-label="ROLLÉ, наверх"><img src="./assets/images/rolle-logo.svg" width="128" height="36" alt="ROLLÉ" /></a><span>РОЛЛЕР ДЛЯ БРЕНДИРОВАНИЯ УПАКОВКИ</span><a href="#top">НАВЕРХ ↑</a></footer>
+
+  <dialog id="requestDialog" class="request-dialog"><form method="dialog" class="request-form" id="requestForm"><button class="close-dialog" aria-label="Закрыть" value="cancel">×</button><span class="eyebrow dark">ROLLÉ / ЗАЯВКА</span><h3>Заявка на<br><em>конфигурацию.</em></h3><p>Сохраните параметры оттиска и контактные данные в текстовый файл для обсуждения с производителем.</p><div class="request-summary" id="requestSummary"></div><label>Ваше имя<input id="customerName" maxlength="80" placeholder="Как к вам обращаться?" /></label><label>Контакт для связи<input id="customerContact" maxlength="120" placeholder="Email или телефон" /></label><button class="btn btn-accent btn-full" type="button" id="saveRequest">Скачать заявку <span>↓</span></button><small>Сайт не отправляет персональные данные на сервер.</small></form></dialog>
+</body>
+</html>
