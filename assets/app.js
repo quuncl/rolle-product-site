@@ -274,8 +274,13 @@ $('#downloadSvg').addEventListener('click',()=>{const col=cfg.ink;const gap=cfg.
 const compareRange=$('#compareRange');function updateCompare(v){const percent=Number(v);$('#compareBefore').style.clipPath=`inset(0 ${100-percent}% 0 0)`;$('#compareDivider').style.left=percent+'%';}compareRange.addEventListener('input',e=>updateCompare(e.target.value));updateCompare(compareRange.value);
 
 // Order flow: prepare a genuine downloadable request, no false promise of sending a purchase.
-function requestText(){return `ROLLÉ — ЗАЯВКА НА ПЕРСОНАЛЬНЫЙ РОЛЛЕР\n\nБренд: ${cfg.brand||'без названия'}\nЦвет оттиска: ${cfg.ink}\nПоверхность: ${cfg.surface}\nИнтервал повторения: ${densityNames[cfg.density]}\nЗагруженный логотип: ${cfg.logoName||'нет'}\nИмя: ${$('#customerName').value.trim()||'не указано'}\nКонтакт: ${$('#customerContact').value.trim()||'не указан'}\n\nСтатус: прототип конфигурации. Производственный макет, наличие, цена, способы оплаты и сроки подтверждаются отдельно.\n`;}
-$('#requestBtn').addEventListener('click',()=>{$('#requestSummary').replaceChildren();[['Название',cfg.brand||'—'],['Цвет',cfg.ink],['Основа',cfg.surface],['Повторение',densityNames[cfg.density]],['Логотип',cfg.logoName||'Текст']].forEach(([key,value])=>{const row=document.createElement('div');const label=document.createElement('b');label.textContent=key+': ';row.append(label,document.createTextNode(value));$('#requestSummary').append(row);});$('#requestDialog').showModal();});
+const surfaceNames={kraft:'Крафт',white:'Белая бумага',dark:'Тёмный картон'};
+const inkNames={'#252923':'Чёрный','#ce503f':'Красный','#f8f6e9':'Белый','#b68d3a':'Золотой'};
+const inkLabel=()=>inkNames[String(cfg.ink).toLowerCase()]||cfg.ink;
+const surfaceLabel=()=>surfaceNames[cfg.surface]||cfg.surface;
+const logoLabel=()=>cfg.logoName||'Не загружен';
+function requestText(){return `ROLLÉ — ЗАЯВКА НА ПЕРСОНАЛЬНЫЙ РОЛЛЕР\n\nБренд: ${cfg.brand||'без названия'}\nЦвет оттиска: ${inkLabel()} (${cfg.ink})\nПоверхность: ${surfaceLabel()}\nИнтервал повторения: ${densityNames[cfg.density]}\nЗагруженный логотип: ${logoLabel()}\nИмя: ${$('#customerName').value.trim()||'не указано'}\nКонтакт: ${$('#customerContact').value.trim()||'не указан'}\n\nСтатус: прототип конфигурации. Производственный макет, наличие, цена, способы оплаты и сроки подтверждаются отдельно.\n`;}
+$('#requestBtn').addEventListener('click',()=>{$('#requestSummary').replaceChildren();[['Название',cfg.brand||'—'],['Цвет',inkLabel()],['Основа',surfaceLabel()],['Повторение',densityNames[cfg.density]],['Логотип',logoLabel()]].forEach(([key,value])=>{const row=document.createElement('div');const label=document.createElement('b');label.textContent=key+': ';row.append(label,document.createTextNode(value));$('#requestSummary').append(row);});$('#requestDialog').showModal();$('#customerName').focus();});
 $('#saveRequest').addEventListener('click',()=>{const val=requestText();download('ROLLE-order-request.txt',val,'text/plain;charset=utf-8');$('#requestDialog').close();});
 $('#requestDialog').addEventListener('click',e=>{if(e.target===$('#requestDialog'))$('#requestDialog').close();});
 

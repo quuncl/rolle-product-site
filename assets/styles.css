@@ -955,6 +955,28 @@ body{background:var(--paper)}
 #customizer .file-input-label{color:#b94f3e}
 #customizer .field-label span{flex:none;margin-left:12px;white-space:nowrap}
 
+/* The request title stays inside the card, and the close control is a button rather than a stray outline. */
+.request-form{container-type:inline-size}
+.request-form h3{
+  font-size:clamp(28px,9.4cqi,42px);
+  max-width:100%;
+  letter-spacing:-.04em;
+}
+.request-form h3 em{display:block}
+.request-dialog .close-dialog{
+  top:14px;
+  right:14px;
+  width:40px;
+  height:40px;
+  display:grid;
+  place-items:center;
+  padding:0;
+  border-radius:8px;
+  font-size:26px;
+  line-height:1;
+}
+.request-dialog .close-dialog:hover{background:#efe8dc}
+
 .compare-base .package-face::after{
   content:"ROLLÉ";
   top:42%;
