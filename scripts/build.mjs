@@ -1,0 +1,2 @@
+import fs from 'node:fs';import path from 'node:path';
+const root=path.resolve(import.meta.dirname,'..');const dist=path.join(root,'dist');fs.rmSync(dist,{recursive:true,force:true});fs.mkdirSync(path.join(dist,'assets'),{recursive:true});for(const f of ['index.html','assets/styles.css','assets/app.js'])fs.copyFileSync(path.join(root,f),path.join(dist,f));fs.cpSync(path.join(root,'assets/images'),path.join(dist,'assets/images'),{recursive:true});console.log(`Built static site: ${dist}`);

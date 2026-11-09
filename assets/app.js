@@ -140,10 +140,12 @@ let demoProgress = 0;
 
 function positionDemo(progress){
   demoProgress = progress;
-  demoRoller.style.left = (12 + 76 * progress) + '%';
+  const start = 20;
+  const span = 60;
+  demoRoller.style.left = (start + span * progress) + '%';
   demoPath.style.clipPath = `inset(0 ${(1 - progress) * 100}% 0 0)`;
   // No-slip rolling: the angle is the distance travelled divided by wheel radius.
-  const distance = demoBoard.clientWidth * .76 * progress;
+  const distance = demoBoard.clientWidth * (span / 100) * progress;
   const radius = demoRoller.offsetHeight * .15;
   demoRoller.style.setProperty('--wheel-angle', `${distance / radius}rad`);
 }
@@ -192,7 +194,46 @@ $$('#demoSwatches .swatch').forEach(s=>s.addEventListener('click',()=>{demoInk=s
 // Customizer with real controls, local image upload and SVG export.
 const cfg={brand:'YOUR BRAND',ink:'#252923',surface:'kraft',density:2,logo:null,logoName:null};
 const densityNames={1:'Редкий',2:'Средний',3:'Частый'};
-function repeatNode(){const container=$('#previewRepeat');container.replaceChildren();const count=cfg.density===1?5:cfg.density===2?7:10;for(let i=0;i<count;i++){if(cfg.logo){const img=document.createElement('span');img.className='mask-logo';img.style.display='inline-block';img.style.backgroundColor=cfg.ink;img.style.mask=`url("${cfg.logo}") center / contain no-repeat`;img.style.webkitMask=`url("${cfg.logo}") center / contain no-repeat`;container.append(img);}else{const text=document.createElement('span');text.textContent=cfg.brand||'YOUR BRAND';container.append(text);}}container.style.gap=cfg.density===1?'62px':cfg.density===2?'31px':'11px';}
+function repeatNode(){
+  const container = $('#previewRepeat');
+  const available = container.parentElement.clientWidth;
+  container.replaceChildren();
+  container.style.fontSize = '';
+  const gap = cfg.density === 1 ? 48 : cfg.density === 2 ? 28 : 12;
+  container.style.gap = gap + 'px';
+  if (!available) return;
+
+  const addCopy = () => {
+    if (cfg.logo){
+      const img = document.createElement('span');
+      img.className = 'mask-logo';
+      img.style.display = 'inline-block';
+      img.style.backgroundColor = cfg.ink;
+      img.style.mask = `url("${cfg.logo}") center / contain no-repeat`;
+      img.style.webkitMask = img.style.mask;
+      return img;
+    }
+    const text = document.createElement('span');
+    text.textContent = cfg.brand || 'YOUR BRAND';
+    return text;
+  };
+
+  const probe = addCopy();
+  container.append(probe);
+  let itemWidth = probe.offsetWidth;
+  if (!cfg.logo && itemWidth > available){
+    const base = parseFloat(getComputedStyle(container).fontSize) || 24;
+    container.style.fontSize = Math.max(13, base * available / itemWidth * 0.92) + 'px';
+    itemWidth = probe.offsetWidth;
+  }
+  probe.remove();
+
+  let used = 0;
+  while (used + itemWidth <= available + 1 && container.childElementCount < 8){
+    container.append(addCopy());
+    used += itemWidth + gap;
+  }
+}
 function renderConfig(){const board=$('#previewBoard');board.dataset.surface=cfg.surface;$('#previewBand').style.setProperty('--ink',cfg.ink);repeatNode();$('#densityValue').textContent=densityNames[cfg.density];}
 $('#brandInput').addEventListener('input',e=>{cfg.brand=e.target.value.slice(0,22).toUpperCase();renderConfig();});
 $$('#builderSwatches .builder-swatch').forEach(s=>s.addEventListener('click',()=>{cfg.ink=s.dataset.color;$$('#builderSwatches .builder-swatch').forEach(t=>{t.classList.toggle('active',t===s);t.setAttribute('aria-pressed',String(t===s));});renderConfig();}));
@@ -200,6 +241,16 @@ $$('.surface-switch button').forEach(s=>s.addEventListener('click',()=>{cfg.surf
 $('#densityRange').addEventListener('input',e=>{cfg.density=Number(e.target.value);renderConfig();});
 $('#logoUpload').addEventListener('change',e=>{const f=e.target.files?.[0];if(!f)return;if(f.size>3*1024*1024){alert('Логотип должен быть не больше 3 МБ.');e.target.value='';return;}const ok=['image/png','image/jpeg','image/svg+xml'].includes(f.type);if(!ok){alert('Поддерживаются PNG, JPG и SVG.');e.target.value='';return;}const reader=new FileReader();reader.onload=()=>{cfg.logo=String(reader.result);cfg.logoName=f.name;$('#resetLogo').hidden=false;renderConfig();};reader.readAsDataURL(f);});
 $('#resetLogo').addEventListener('click',()=>{cfg.logo=null;cfg.logoName=null;$('#logoUpload').value='';$('#resetLogo').hidden=true;renderConfig();});renderConfig();
+if ('ResizeObserver' in window){
+  let fittedWidth = 0;
+  new ResizeObserver(() => {
+    const width = $('#previewBand').clientWidth;
+    if (width && width !== fittedWidth){
+      fittedWidth = width;
+      repeatNode();
+    }
+  }).observe($('#previewBand'));
+}
 const escapeXML=s=>String(s).replace(/[<>&"']/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&apos;'}[c]));
 function download(name,content,type){const blob=new Blob([content],{type}),url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);}
 $('#downloadSvg').addEventListener('click',()=>{const col=cfg.ink;const gap=cfg.density===1?320:cfg.density===2?240:170;let repeat='';for(let i=0;i<5;i++){const x=20+i*gap;if(cfg.logo){repeat+=`<image x="${x}" y="30" width="145" height="80" href="${escapeXML(cfg.logo)}" preserveAspectRatio="xMidYMid meet" />`;}else{repeat+=`<text x="${x}" y="84" fill="${col}" font-size="39" font-family="Arial, sans-serif" font-weight="900">${escapeXML(cfg.brand||'YOUR BRAND')}</text>`;}}const bg=cfg.surface==='kraft'?'#c9a575':cfg.surface==='dark'?'#3c413c':'#ece9df';const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="160" viewBox="0 0 1200 160"><rect width="1200" height="160" fill="${bg}"/><path d="M0 10H1200 M0 149H1200" stroke="${col}" stroke-width="4"/>${repeat}</svg>`;download('rolle-preview.svg',svg,'image/svg+xml;charset=utf-8');});

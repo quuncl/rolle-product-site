@@ -1,0 +1,9 @@
+{
+  "name":"rolle-3d-product-experience",
+  "private":true,
+  "version":"0.1.0",
+  "type":"module",
+  "description":"Standalone WebGL2 landing page for a custom packaging branding roller",
+  "scripts":{"build":"node scripts/build.mjs","dev":"python3 -m http.server 5173","preview":"cd dist && python3 -m http.server 4173"},
+  "engines":{"node":">=20"}
+}

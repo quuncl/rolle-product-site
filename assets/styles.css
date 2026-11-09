@@ -898,3 +898,66 @@ body{background:var(--paper)}
 .final-cta{color:var(--ink)}
 .site-footer{background:#171916}
 ::selection{background:#f0c4b8;color:#20211e}
+
+/* The print wheel sits on the ink line, and the handle stays inside the card. */
+.print-path{
+  left:20%;
+  top:72%;
+  width:60%;
+}
+.demo-roller{
+  top:calc(72% - var(--roller-height) * .32);
+  transform:rotate(180deg);
+}
+
+/* The before/after box needs room inside the frame, with a whole word on the branded side. */
+.compare{height:clamp(440px,52vw,580px)}
+.package-scene,
+.compare .package-scene,
+.compare-before .package-scene{
+  width:min(64%,440px);
+  left:50%;
+  top:12%;
+  transform:translateX(-50%) skewY(-3deg) rotate(-3deg);
+}
+.compare-base .package-face::before{content:none}
+/* The customizer sample shows whole words, and the preview column matches the form. */
+#customizer .builder-shell{
+  align-items:stretch;
+  background:transparent;
+}
+#customizer .builder-preview{
+  display:flex;
+  flex-direction:column;
+  background:transparent;
+}
+#customizer .preview-stage{
+  flex:1;
+  background:radial-gradient(ellipse at 50% 35%,#fff 0%,#efe8dc 82%);
+}
+#customizer .preview-band{
+  left:0;
+  width:100%;
+  top:50%;
+  height:auto;
+  transform:translateY(-50%);
+  overflow:hidden;
+}
+#customizer .preview-repeat{line-height:1}
+#customizer .preview-footer{padding:16px 4px 0}
+#customizer .preview-footer .inline-action{color:var(--paper-accent)}
+#customizer .field-label span{flex:none;margin-left:12px}
+
+.compare-base .package-face::after{
+  content:"ROLLÉ";
+  top:42%;
+  left:68%;
+  width:max-content;
+  height:auto;
+  padding:.28em .65em;
+  background:#2a2c28;
+  color:#f4efe4;
+  font-size:clamp(15px,2vw,26px);
+  letter-spacing:.14em;
+  transform:rotate(-10deg);
+}
