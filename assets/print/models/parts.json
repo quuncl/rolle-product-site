@@ -1,0 +1,96 @@
+{
+  "unit": "mm",
+  "disclaimer": "Геометрия из файлов печати 3MF. Колесо-клише в этот комплект не входит.",
+  "parts": [
+    {
+      "id": "01-head",
+      "file": "models/01-head.glb",
+      "label": "Головка",
+      "material": "pla",
+      "color": "#2f4ad4",
+      "kit": [
+        -110,
+        0,
+        0
+      ],
+      "focus": [
+        -110,
+        8,
+        0
+      ],
+      "spin": 0.004
+    },
+    {
+      "id": "02-handle",
+      "file": "models/02-handle.glb",
+      "label": "Рукоятка",
+      "material": "pla",
+      "color": "#2a45cc",
+      "kit": [
+        -40,
+        0,
+        0
+      ],
+      "focus": [
+        -40,
+        8,
+        0
+      ],
+      "spin": 0.0035
+    },
+    {
+      "id": "03-screw",
+      "file": "models/03-screw.glb",
+      "label": "Винт",
+      "material": "pla",
+      "color": "#3452dc",
+      "kit": [
+        30,
+        0,
+        0
+      ],
+      "focus": [
+        30,
+        8,
+        0
+      ],
+      "spin": 0.005
+    },
+    {
+      "id": "04-ring",
+      "file": "models/04-ring.glb",
+      "label": "Кольцо трения",
+      "material": "tpu",
+      "color": "#1c1f1d",
+      "kit": [
+        85,
+        0,
+        0
+      ],
+      "focus": [
+        85,
+        8,
+        0
+      ],
+      "spin": 0.006
+    },
+    {
+      "id": "05-heel",
+      "file": "models/05-heel.glb",
+      "label": "Пятка маркера",
+      "material": "tpu",
+      "color": "#242826",
+      "kit": [
+        130,
+        0,
+        0
+      ],
+      "focus": [
+        130,
+        8,
+        0
+      ],
+      "spin": 0.0055
+    }
+  ]
+}

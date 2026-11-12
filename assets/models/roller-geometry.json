@@ -1,0 +1,40 @@
+{
+  "source": "Сборка роллера 06",
+  "units": "metres",
+  "up_axis": "Y",
+  "parts": {
+    "Head": {
+      "original_triangles": 95072,
+      "web_triangles": 13108
+    },
+    "Handle": {
+      "original_triangles": 75258,
+      "web_triangles": 12146
+    },
+    "Adjuster": {
+      "original_triangles": 178272,
+      "web_triangles": 13350
+    },
+    "Marker_foot": {
+      "original_triangles": 2304,
+      "web_triangles": 948
+    },
+    "Drum": {
+      "original_triangles": 51200,
+      "web_triangles": 2322
+    },
+    "Sleeve": {
+      "original_triangles": 1179648,
+      "web_triangles": 17042
+    },
+    "Axle": {
+      "original_triangles": 43488,
+      "web_triangles": 2758
+    },
+    "Axle_nut": {
+      "original_triangles": 43488,
+      "web_triangles": 2706
+    }
+  },
+  "glb_bytes": 1952972
+}

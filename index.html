@@ -4,13 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#161617" />
-  <meta name="description" content="ROLLÉ — персональный роллер для фирменной упаковки. Посмотрите 3D-модель, попробуйте печать и создайте свой дизайн." />
+  <meta name="description" content="ROLLÉ — ручной роллер для нанесения логотипа на коробки и бумажную упаковку. Посмотрите принцип печати и примерьте свой логотип в конструкторе оттиска." />
   <meta property="og:title" content="ROLLÉ — ваш бренд одним движением" />
   <meta property="og:description" content="Интерактивная 3D-презентация роллера для брендирования упаковки." />
   <title>ROLLÉ — оставьте свой след.</title>
   <link rel="icon" type="image/svg+xml" href="./assets/images/rolle-mark.svg" />
-  <link rel="stylesheet" href="./assets/styles.css?v=11" />
-  <script defer src="./assets/app.js?v=11"></script>
+  <link rel="stylesheet" href="./assets/styles.css?v=56" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./assets/vendor/three.module.js",
+      "three/addons/": "./assets/vendor/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="./assets/app.js?v=56"></script>
+  <script defer src="./assets/preview-offer.js?v=47"></script>
+  <script type="module" src="./assets/roller-viewer.js?v=44"></script>
 </head>
 <body>
   <div id="scroll-progress" class="scroll-progress" aria-hidden="true"></div>
@@ -19,7 +29,6 @@
     <nav class="desktop-nav" aria-label="Основная навигация">
       <a href="#product">Продукт</a><a href="#demo">Как работает</a><a href="#customizer">Конструктор</a><a href="#details">Результат</a>
     </nav>
-    <div class="header-actions"><a class="btn btn-header" href="#customizer">Собрать оттиск <span aria-hidden="true">↗</span></a></div>
     <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню" aria-controls="mobileMenu" aria-expanded="false">☰</button>
   </header>
   <nav class="mobile-menu" id="mobileMenu" aria-label="Мобильная навигация"><a href="#product">Продукт</a><a href="#demo">Как работает</a><a href="#customizer">Конструктор</a><a href="#details">Результат</a></nav>
@@ -28,11 +37,13 @@
     <div class="hero-story" id="hero">
     <section class="hero section-pad">
       <div class="hero-copy">
-        <p class="hero-kicker"><img src="./assets/images/rolle-logo.svg" width="128" height="36" alt="ROLLÉ" /></p>
-        <h1>Ваш бренд.<br>Одним движением.</h1>
-        <p class="hero-lead">Ручной роллер со сменным клише для бумаги и картона.</p>
+        <h1>Ваш логотип<br>на упаковке.</h1>
+        <p class="hero-lead">Ручной роллер для печати на коробках и&nbsp;бумажных пакетах.</p>
+        <div class="hero-ctas">
+          <a href="#demo" class="btn btn-accent hero-primary-cta">Посмотреть, как работает <span aria-hidden="true">↓</span></a>
+        </div>
       </div>
-      <div class="hero-visual hero-photo-stage">
+      <div class="hero-visual hero-photo-stage" data-roller-viewer="hero">
         <img class="hero-product-photo" id="heroProductPhoto" src="./assets/images/roller-smooth-side.webp"
           width="941" height="1672" alt="Прототип роллера ROLLÉ, вид сбоку" fetchpriority="high" decoding="async" />
         <img class="hero-product-photo hero-product-photo-front" id="heroProductPhotoFront"
@@ -105,31 +116,7 @@
         </defs>
       </svg>
       <div class="hero-actions">
-        <div class="roller-preview-settings">
-          <fieldset class="roller-colors">
-            <legend>Цвет корпуса</legend>
-            <div class="roller-color-options">
-              <label title="Синий" style="--sample:#494db0"><input type="radio" name="roller-color" value="blue" aria-label="Синий" checked><span></span></label>
-              <label title="Чёрный" style="--sample:#28282c"><input type="radio" name="roller-color" value="black" aria-label="Чёрный"><span></span></label>
-              <label title="Жёлтый" style="--sample:#f5c535"><input type="radio" name="roller-color" value="yellow" aria-label="Жёлтый"><span></span></label>
-              <label title="Зелёный" style="--sample:#42a65e"><input type="radio" name="roller-color" value="green" aria-label="Зелёный"><span></span></label>
-              <label title="Белый" style="--sample:#f5f5f7"><input type="radio" name="roller-color" value="white" aria-label="Белый"><span></span></label>
-            </div>
-            <output class="roller-color-name" id="rollerColorName">Синий</output>
-          </fieldset>
-          <fieldset class="roller-background">
-            <legend>Фон предпросмотра</legend>
-            <div class="roller-background-options">
-              <label><input type="radio" name="roller-background" value="dark" checked><span>Тёмный</span></label>
-              <label><input type="radio" name="roller-background" value="light"><span>Светлый</span></label>
-            </div>
-          </fieldset>
-        </div>
-        <div class="hero-ctas">
-          <a href="#customizer" class="btn btn-accent">Собрать оттиск</a>
-          <a href="#demo" class="text-link">Посмотреть печать <span aria-hidden="true">›</span></a>
-        </div>
-        <p class="hero-caption">Визуализация цвета <span aria-hidden="true">·</span> Прокрутите, чтобы рассмотреть</p>
+        <p class="hero-caption">3D-концепт</p>
       </div>
       <div class="hero-story-progress" aria-hidden="true"></div>
     </section>
@@ -151,13 +138,33 @@
         <h2 class="display-heading">Устройство роллера</h2>
         <p>Маркер подаёт краску на рельефное клише. При прокатке клише переносит рисунок на упаковку.</p>
       </div>
-      <div class="engineering-scene engineering-photo-stage">
+      <div class="engineering-scene engineering-photo-stage" data-roller-viewer="engineering">
         <img class="engineering-product-photo" id="engineeringPhoto" src="./assets/images/roller-smooth-side.webp"
           width="941" height="1672" alt="Синий прототип роллера, вид сбоку" loading="lazy" decoding="async" />
         <img class="engineering-product-photo engineering-product-photo-front" id="engineeringPhotoFront"
           src="./assets/images/roller-smooth-front.webp" width="941" height="1672" alt="" aria-hidden="true" loading="lazy" decoding="async" />
       </div>
-      <p class="engineering-photo-caption">Синий прототип. Ракурс меняется при прокрутке.</p>
+        <div class="roller-preview-settings">
+          <fieldset class="roller-colors">
+            <legend>Цвет корпуса</legend>
+            <div class="roller-color-options">
+              <label title="Синий" style="--sample:#494db0"><input type="radio" name="roller-color" value="blue" aria-label="Синий" checked><span></span></label>
+              <label title="Чёрный" style="--sample:#28282c"><input type="radio" name="roller-color" value="black" aria-label="Чёрный"><span></span></label>
+              <label title="Жёлтый" style="--sample:#f5c535"><input type="radio" name="roller-color" value="yellow" aria-label="Жёлтый"><span></span></label>
+              <label title="Зелёный" style="--sample:#42a65e"><input type="radio" name="roller-color" value="green" aria-label="Зелёный"><span></span></label>
+              <label title="Белый" style="--sample:#f5f5f7"><input type="radio" name="roller-color" value="white" aria-label="Белый"><span></span></label>
+            </div>
+            <output class="roller-color-name" id="rollerColorName">Синий</output>
+          </fieldset>
+          <fieldset class="roller-background">
+            <legend>Фон предпросмотра</legend>
+            <div class="roller-background-options">
+              <label><input type="radio" name="roller-background" value="dark" checked><span>Тёмный</span></label>
+              <label><input type="radio" name="roller-background" value="light"><span>Светлый</span></label>
+            </div>
+          </fieldset>
+        </div>
+      <p class="engineering-photo-caption">3D-сборка из предоставленной модели. Вращайте мышью, касанием или стрелками. Геометрия и цвета требуют проверки на реальном изделии.</p>
       <!-- Галерея прототипа временно скрыта.
       <div class="prototype-gallery">
         <div class="prototype-gallery-heading">
@@ -199,11 +206,14 @@
 
     <section class="how section-pad" id="demo">
       <div class="section-index">Печать на упаковке</div>
-      <div class="how-head"><h2 class="display-heading">Проведите.<br>Посмотрите на результат.</h2><p>Выберите цвет и прокатите роллер, чтобы увидеть, как на крафт-картоне появляется повторяющийся рисунок.</p></div>
+      <div class="how-head"><h2 class="display-heading">Проведите.<br>Посмотрите на результат.</h2><p>Роллер идёт вдоль края коробки. Повторяющийся оттиск показывает принцип печати, а не результат испытаний.</p></div>
       <div class="demo-workspace">
         
         <div class="craft-board" id="craftBoard">
-          <div class="craft-pattern"></div>
+          <div class="mailer" aria-hidden="true">
+            <img class="mailer-photo" id="demoBoxPhoto" src="./assets/images/demo-kraft-box-realistic.webp"
+              width="1903" height="826" alt="" loading="lazy" decoding="async" />
+          </div>
           <div class="print-path" id="printPath"><div class="print-content" id="printContent"></div></div>
           <div class="demo-roller" id="demoRoller" aria-hidden="true">
             <img class="demo-wheel-spin" src="./assets/images/roller-print-wheel.png" width="1254" height="1254" alt="" decoding="async" />
@@ -226,7 +236,7 @@
         <div class="demo-controls"><div class="color-control"><span class="control-label">ЦВЕТ ОТПЕЧАТКА</span><div class="swatches" id="demoSwatches"><button class="swatch active" data-ink="#262924" style="--swatch:#262924" aria-label="Чёрный" title="Чёрный"></button><button class="swatch" data-ink="#ce503f" style="--swatch:#ce503f" aria-label="Красный" title="Красный"></button><button class="swatch" data-ink="#346a9f" style="--swatch:#346a9f" aria-label="Синий" title="Синий"></button><button class="swatch light-swatch" data-ink="#f8f6e9" style="--swatch:#f8f6e9" aria-label="Белый" title="Белый"></button><button class="swatch" data-ink="#b68d3a" style="--swatch:#b68d3a" aria-label="Золотой" title="Золотой"></button></div></div><button class="btn btn-dark" id="runDemo">Прокатить роллер <span>↗</span></button></div>
       </div>
       <p class="demo-status" id="demoStatus" role="status">Нажмите «Прокатить роллер», чтобы начать.</p>
-      <p class="demo-disclaimer">Демонстрация иллюстрирует принцип непрерывной печати. Финальная чёткость и доступные цвета зависят от материала клише, маркера и поверхности.</p>
+      <p class="demo-disclaimer">Это визуализация контакта колеса с краем коробки. Чёткость, цвет и поведение краски на настоящей упаковке здесь не показаны.</p>
     </section>
 
     <section class="features section-pad" id="benefits">
@@ -234,16 +244,16 @@
       <div class="feature-intro"><h2 class="display-heading">Три составляющие оттиска</h2></div>
       <div class="feature-cards">
         <article class="feature-card">
-          <h3>Сменное клише</h3>
-          <p>Название, логотип или узор повторяются вдоль всей линии прокатки.</p>
+          <h3>Головка с клише</h3>
+          <p>Печатный барабан из комплекта оставляет повторяющийся рисунок по линии прокатки.</p>
         </article>
         <article class="feature-card">
-          <h3>Сменный маркер</h3>
-          <p>В конструкторе можно сравнить цвета оттиска на светлой и тёмной основе.</p>
+          <h3>Маркер и винт</h3>
+          <p>Маркер подаёт краску; нижний винт подводит перо до лёгкого касания клише.</p>
         </article>
         <article class="feature-card">
           <h3>Бумага и картон</h3>
-          <p>Рисунок можно примерить на коробках, бумажных пакетах и бирках.</p>
+          <p>Конструктор показывает эскиз оттиска на крафте, белой бумаге и тёмном картоне.</p>
         </article>
       </div>
     </section>
@@ -251,26 +261,48 @@
     <section class="builder section-pad" id="customizer">
       <div class="builder-title">
         <h2 class="display-heading">Теперь — с вашим именем.</h2>
-        <p>Примерьте свой логотип или название на бумаге и картоне.</p>
+        <p>Добавьте свой знак, передвиньте оттиск и посмотрите, как он ложится на упаковку.</p>
       </div>
       <div class="builder-shell">
         <div class="builder-preview">
+          <div class="preview-toolbar">
+            <span class="preview-material-label" id="previewMaterial">Крафт</span>
+            <button type="button" class="preview-run" id="previewRun">Прокатить <span aria-hidden="true">↗</span></button>
+          </div>
           <div class="preview-stage">
             <div class="preview-board" id="previewBoard">
-              <div class="preview-band" id="previewBand"><div class="preview-repeat" id="previewRepeat"></div></div>
+              <img class="preview-box-photo" src="./assets/images/customizer-box-realistic.webp"
+                width="1448" height="1086" alt="" aria-hidden="true" loading="lazy" decoding="async" />
+              <div class="preview-print-surface" id="previewPrintSurface">
+                <div class="preview-band" id="previewBand" role="slider" tabindex="0" aria-label="Положение оттиска на упаковке" aria-orientation="vertical" aria-valuemin="15" aria-valuemax="85" aria-valuenow="50" aria-valuetext="По центру, 50%" aria-describedby="previewDragHint"><div class="preview-repeat" id="previewRepeat"></div></div>
+                <span class="preview-print-cursor" id="previewPrintCursor" aria-hidden="true" hidden></span>
+              </div>
             </div>
           </div>
+          <div class="preview-interaction-bar">
+            <p id="previewDragHint">↕ Передвиньте оттиск мышью, касанием или стрелками.</p>
+            <button type="button" class="preview-center" id="previewCenter">По центру</button>
+          </div>
+          <p class="preview-live-status" id="previewLiveStatus" role="status">Настройте оттиск и нажмите «Прокатить».</p>
           <div class="preview-footer">
             <span>Предпросмотр оттиска</span>
-            <button type="button" id="downloadSvg" class="inline-action">Скачать SVG <span aria-hidden="true">↓</span></button>
+            <button type="button" id="downloadSvg" class="inline-action">Скачать эскиз SVG <span aria-hidden="true">↓</span></button>
           </div>
+          <p class="preview-export-note" id="svgExportNote">SVG содержит эскиз полосы оттиска, не файл для изготовления клише.</p>
         </div>
         <div class="builder-panel">
           <label for="brandInput" class="field-label">Название бренда</label>
-          <input id="brandInput" class="brand-input" value="YOUR BRAND" maxlength="22" spellcheck="false" aria-describedby="brandHelp" />
+          <input id="brandInput" class="brand-input" value="ВАШ БРЕНД" maxlength="22" spellcheck="false" aria-describedby="brandHelp" />
           <small id="brandHelp">До 22 символов</small>
+          <div class="brand-examples" role="group" aria-label="Попробовать пример надписи">
+            <span>Попробуйте:</span>
+            <button type="button" data-brand-example="FORMA" aria-pressed="false">FORMA</button>
+            <button type="button" data-brand-example="СДЕЛАНО ВРУЧНУЮ" aria-pressed="false">Сделано вручную</button>
+            <button type="button" data-brand-example="С ЛЮБОВЬЮ" aria-pressed="false">С любовью</button>
+          </div>
           <label for="logoUpload" class="file-input-label">Загрузить логотип <span>PNG, JPG, SVG</span><input type="file" id="logoUpload" accept="image/png,image/jpeg,image/svg+xml" /></label>
           <button type="button" class="reset-logo" id="resetLogo" hidden>Убрать логотип</button>
+          <p class="logo-check" id="logoCheck" role="status">После загрузки покажем, влезает ли знак в полосу и нет ли слишком тонких линий.</p>
 
           <div class="field-label" id="inkLabel">Цвет печати</div>
           <div class="builder-colors" id="builderSwatches" role="group" aria-labelledby="inkLabel">
@@ -288,24 +320,122 @@
           </div>
 
           <label for="densityRange" class="field-label">Интервал повторения <span id="densityValue">Средний</span></label>
-          <input id="densityRange" type="range" min="1" max="3" value="2" step="1" />
+          <input id="densityRange" class="density-range" type="range" min="1" max="3" value="2" step="0.01" aria-valuetext="Средний" />
           <button class="btn btn-accent btn-full" id="requestBtn" type="button">Подготовить заявку</button>
           <p class="micro-note">Сохраните конфигурацию для обсуждения с производителем.</p>
         </div>
       </div>
     </section>
 
-    <section class="transformation section-pad" id="details"><div class="section-index light">ДО / ПОСЛЕ</div><div class="trans-head"><h2 class="display-heading">Коробка до и после</h2><p>Передвиньте разделитель, чтобы сравнить чистый картон и упаковку с оттиском.</p></div><div class="compare" id="compare" aria-label="Сравнение коробки до и после брендирования"><div class="compare-base"><div class="package-scene"><div class="package-face"><span class="package-noise"></span></div><span class="package-top"></span><span class="package-side"></span></div><span class="comparison-label after">С БРЕНДИРОВАНИЕМ</span></div><div class="compare-before" id="compareBefore"><div class="package-scene"><div class="package-face"><span class="package-noise"></span></div><span class="package-top"></span><span class="package-side"></span></div><span class="comparison-label before">ДО</span></div><div class="compare-divider" id="compareDivider"><span>↔</span></div><input id="compareRange" type="range" min="5" max="95" value="50" aria-label="Показать до и после" /></div></section>
+    <section class="transformation section-pad" id="details">
+      <div class="section-index light">ДО / ПОСЛЕ</div>
+      <div class="trans-head">
+        <h2 class="display-heading">Коробка до и после</h2>
+        <p id="compareHelp">Передвиньте разделитель: слева чистая коробка, справа — с вашим оттиском.</p>
+      </div>
+      <div class="compare" id="compare" aria-label="Сравнение коробки до и после брендирования">
+        <div class="compare-base">
+          <div class="comparison-box">
+            <img class="comparison-box-photo" src="./assets/images/customizer-box-realistic.webp" width="1448" height="1086" alt="" aria-hidden="true" loading="lazy" decoding="async" />
+            <div class="comparison-print-surface" id="comparisonPrintSurface"><div class="package-print" id="comparePrint"></div></div>
+          </div>
+          <span class="comparison-label after">С БРЕНДИРОВАНИЕМ</span>
+        </div>
+        <div class="compare-before" id="compareBefore">
+          <div class="comparison-box">
+            <img class="comparison-box-photo" src="./assets/images/customizer-box-realistic.webp" width="1448" height="1086" alt="" aria-hidden="true" loading="lazy" decoding="async" />
+          </div>
+          <span class="comparison-label before">ДО</span>
+        </div>
+        <div class="compare-divider" id="compareDivider" aria-hidden="true"><span>↔</span></div>
+        <input id="compareRange" type="range" min="0" max="100" value="50" aria-label="Показать до и после" aria-describedby="compareHelp" />
+      </div>
+    </section>
 
-    <section class="faq section-pad"><div class="section-index">ВОПРОСЫ И ОТВЕТЫ</div><div class="faq-grid"><h2 class="display-heading">Частые вопросы</h2><div class="faq-list"><details><summary>Можно ли нанести свой логотип? <span>+</span></summary><p>Да, предполагается изготовление персонального сменного клише. Перед производством файл нужно проверить на толщину линий и читаемость.</p></details><details><summary>На каких поверхностях работает роллер? <span>+</span></summary><p>Прежде всего на бумаге и картоне, если выбранный маркер подходит материалу. Глянцевые, ламинированные и пластиковые поверхности требуют отдельных испытаний.</p></details><details><summary>Можно ли менять цвет? <span>+</span></summary><p>Конструкция предусматривает смену маркера. Перед сменой цвета клише необходимо очистить и проверить совместимость краски.</p></details><details><summary>На фотографиях готовое изделие? <span>+</span></summary><p>На фотографиях показан прототип с удалённым фоном. Окончательные материалы, параметры и качество печати будут подтверждены после испытаний.</p></details></div></div></section>
+    <section class="product-support section-pad" aria-labelledby="supportTitle">
+      <div class="section-index">ПРОИЗВОДСТВО И ПОДДЕРЖКА</div>
+      <h2 class="display-heading" id="supportTitle">Продумано надолго.</h2>
+      <div class="product-support-grid">
+        <article>
+          <p class="product-support-label">Гарантия</p>
+          <h3>2 месяца</h3>
+          <p>Гарантия на роллер — 2 месяца.</p>
+        </article>
+        <article>
+          <p class="product-support-label">Развитие продукта</p>
+          <h3>Обновления по подписке</h3>
+          <p>Подписка на стабильные обновления и улучшения роллера.</p>
+        </article>
+        <article>
+          <p class="product-support-label">Производство и материал</p>
+          <h3>Сделано в России</h3>
+          <p>Материал — из Кореи <span role="img" aria-label="Южная Корея">🇰🇷</span></p>
+        </article>
+      </div>
+    </section>
+
+    <section class="faq section-pad"><div class="section-index">ВОПРОСЫ И ОТВЕТЫ</div><div class="faq-grid"><h2 class="display-heading">Частые вопросы</h2><div class="faq-list"><details><summary>Можно ли нанести свой логотип? <span>+</span></summary><p>Да, предполагается изготовление персонального сменного клише. Конструктор делает предварительную проверку полосы и тонких линий, но перед производством файл всё равно нужно проверить на толщину линий и читаемость.</p></details><details><summary>На каких поверхностях работает роллер? <span>+</span></summary><p>Прежде всего на бумаге и картоне, если выбранный маркер подходит материалу. Глянцевые, ламинированные и пластиковые поверхности требуют отдельных испытаний.</p></details><details><summary>Можно ли менять цвет? <span>+</span></summary><p>Конструкция предусматривает смену маркера. Перед сменой цвета клише необходимо очистить и проверить совместимость краски.</p></details><details><summary>На фотографиях готовое изделие? <span>+</span></summary><p>На фотографиях показан прототип с удалённым фоном. Окончательные материалы, параметры и качество печати будут подтверждены после испытаний.</p></details><details><summary>Можно ли скачать файлы для 3D-печати? <span>+</span></summary><p>Да, на сайте лежит комплект 3MF/STL для Bambu A1: головка, рукоятка, винт, кольцо трения и пятка маркера. Это прототипный набор. Перед печатью проверьте посадку своего маркера — совместимость разных корпусов не гарантируется.</p></details></div></div></section>
 
     <section class="final-cta section-pad">
-      <h2>Примерьте свой логотип</h2>
-      <a href="#customizer" class="btn btn-dark">Открыть конструктор <span aria-hidden="true">↗</span></a>
+      <h2>Как будет выглядеть<br>ваша упаковка?</h2>
+      <p class="final-cta-copy">Добавьте свой логотип или название. Выберите цвет оттиска и посмотрите эскиз на крафте, бумаге или картоне.</p>
+      <a href="#customizer" class="btn btn-accent">Примерить свой логотип <span aria-hidden="true">↗</span></a>
     </section>
   </main>
-  <footer class="site-footer"><a class="brand" href="#top" aria-label="ROLLÉ, наверх"><img src="./assets/images/rolle-logo.svg" width="128" height="36" alt="ROLLÉ" /></a><span>РОЛЛЕР ДЛЯ БРЕНДИРОВАНИЯ УПАКОВКИ</span><a href="#top">НАВЕРХ ↑</a></footer>
+  <footer class="site-footer">
+    <a class="brand" href="#top" aria-label="ROLLÉ, наверх"><img src="./assets/images/rolle-logo.svg" width="128" height="36" alt="ROLLÉ" /></a>
+    <div class="footer-copy">
+      <span>РОЛЛЕР ДЛЯ БРЕНДИРОВАНИЯ УПАКОВКИ</span>
+      <p class="footer-concept">Сайт показывает концепт прототипа. Наличие, цена и качество печати ещё не подтверждены.</p>
+    </div>
+    <a href="#top">НАВЕРХ ↑</a>
+  </footer>
 
-  <dialog id="requestDialog" class="request-dialog"><form method="dialog" class="request-form" id="requestForm"><button class="close-dialog" aria-label="Закрыть" value="cancel">×</button><span class="eyebrow dark">ROLLÉ / ЗАЯВКА</span><h3>Заявка на <em>конфигурацию.</em></h3><p>Сохраните параметры оттиска и контактные данные в текстовый файл для обсуждения с производителем.</p><div class="request-summary" id="requestSummary"></div><label>Ваше имя<input id="customerName" maxlength="80" placeholder="Как к вам обращаться?" /></label><label>Контакт для связи<input id="customerContact" maxlength="120" placeholder="Email или телефон" /></label><button class="btn btn-accent btn-full" type="button" id="saveRequest">Скачать заявку <span>↓</span></button><small>Сайт не отправляет персональные данные на сервер.</small></form></dialog>
+  <dialog class="preview-offer" id="previewOffer" aria-labelledby="previewOfferTitle" aria-describedby="previewOfferDescription">
+    <div class="preview-offer-card">
+      <button class="preview-offer-close" type="button" aria-label="Закрыть предложение">×</button>
+      <div class="preview-offer-art">
+        <img src="./assets/images/packaging-preview-realistic.webp" width="2060" height="763"
+          alt="Визуализация крафтовой коробки с повторяющимся оттиском «ВАШ БРЕНД»" decoding="async" />
+        <span class="preview-offer-art-note">Визуализация оттиска</span>
+      </div>
+      <div class="preview-offer-copy">
+        <p class="preview-offer-kicker">Упаковка с вашим характером</p>
+        <h2 id="previewOfferTitle">А если здесь<br>будет ваш логотип?</h2>
+        <p id="previewOfferDescription">Примерьте свой знак на упаковке и&nbsp;сохраните эскиз оттиска.</p>
+        <a class="btn preview-offer-cta" href="#customizer" autofocus>Примерить свой логотип <span aria-hidden="true">↗</span></a>
+        <button class="preview-offer-later" type="button">Пока посмотрю сайт</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="requestDialog" class="request-dialog" aria-labelledby="requestTitle" aria-describedby="requestLead">
+    <form method="dialog" class="request-form" id="requestForm" novalidate>
+      <header class="request-top">
+        <span class="eyebrow dark">ROLLÉ / ЗАЯВКА</span>
+        <button class="close-dialog" type="button" aria-label="Закрыть">×</button>
+      </header>
+      <div class="request-content">
+        <h3 id="requestTitle" tabindex="-1">Сохранить конфигурацию</h3>
+        <p class="request-lead" id="requestLead">Скачайте параметры оттиска для обсуждения с&nbsp;производителем. Это предварительная заявка, не&nbsp;заказ.</p>
+        <section class="request-summary" id="requestSummary" aria-label="Параметры конфигурации"></section>
+        <div class="request-fields">
+          <div class="request-field">
+            <label for="customerName"><span>Ваше имя <small>необязательно</small></span><input id="customerName" name="customerName" maxlength="80" autocomplete="name" placeholder="Как к вам обращаться?" aria-describedby="customerNameError" /></label>
+            <p id="customerNameError" class="request-field-error" aria-live="polite" hidden></p>
+          </div>
+          <div class="request-field">
+            <label for="customerContact"><span>Контакт <small>необязательно</small></span><input id="customerContact" name="customerContact" maxlength="120" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="Email или телефон" aria-describedby="customerContactError" /></label>
+            <p id="customerContactError" class="request-field-error" aria-live="polite" hidden></p>
+          </div>
+        </div>
+      </div>
+      <div class="request-actions">
+        <button class="btn btn-accent btn-full" type="submit" id="saveRequest">Скачать заявку <span aria-hidden="true">↓</span></button>
+        <p class="request-next">Передайте файл производителю: цену и&nbsp;сроки согласуют отдельно.</p>
+        <small>Файл останется у вас. Данные с сайта не отправляются.</small>
+      </div>
+    </form>
+  </dialog>
 </body>
 </html>

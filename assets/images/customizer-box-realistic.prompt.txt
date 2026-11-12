@@ -1,0 +1,10 @@
+Generated with built-in image_gen. Visualization of packaging; not a photo of a tested print.
+
+Use case: product-mockup.
+Asset type: photorealistic transparent cardboard box for a live packaging print customizer.
+Primary request: replace a flat CSS cardboard sheet with a realistic three-dimensional kraft shipping box; keep a large blank frontal face for movable digital text overlays.
+Subject: one closed natural brown corrugated cardboard parcel box, approximately 26 cm wide, 19 cm high, 9 cm deep. Completely blank, unprinted, no tape or labels.
+Framing: 4:3 landscape composition. Entire box and soft contact shadow inside the frame, moderate transparent margins. Almost straight-on front elevation, slightly elevated camera, long-lens nearly orthographic photography. A narrow strip of the top and a little right-side depth are visible. The large front face is approximately rectangular with straight vertical side edges and horizontal top and bottom edges, no camera roll. Front face should occupy about 82% of image width, from around 8% to 90%, and about 67% of image height, from around 21% to 88%. Keep this front face uninterrupted and evenly lit so text can be overlaid anywhere on it.
+Realism: tiny paper fibres, subtle fine kraft grain, compressed fold lines, crisp folded corrugated seams, tiny imperfections at corners. Solid real matte cardboard with convincingly three-dimensional edges and thickness, not a flat cutout panel or a smooth plastic render. Soft natural warm daylight from upper left, gentle real shadows underneath.
+Background: genuinely transparent alpha background around the box and contact shadow, no tabletop rectangle.
+Constraints: only one box. No rollers, hands, objects, text, letters, graphics, logos, shipping labels, UI or watermark. Keep front plane as square to camera as possible for a live print overlay; no strong perspective slant.

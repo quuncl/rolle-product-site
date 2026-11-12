@@ -1,0 +1,9 @@
+Generated with built-in image_gen. Image is a visualization, not a photo of a tested product.
+
+Use case: product-mockup.
+Asset type: photorealistic wide header image for a ROLLÉ packaging roller website popup.
+Primary request: replace a flat schematic cardboard graphic with a convincingly photographic kraft shipping box bearing a repeated ink imprint.
+Scene: a single closed small natural brown corrugated kraft mailer box on a warm off-white studio tabletop. Elevated three-quarter view shows the lid, long front side and a little of one end, clearly three dimensional. Box centred in a wide horizontal composition, about 2.7:1 aspect ratio, entire box and soft contact shadow within frame, modest breathing room.
+Material and realism: visible tiny cardboard fibres and speckles, folded edges, subtle creases and real corrugated thickness at seams, matte surface. Soft daylight from upper left with believable shadows and gentle tonal variation. Premium understated product photography, 70mm lens, crisp materials, natural warm neutral palette.
+Print: on the long front side, a continuous narrow strip with dark charcoal ink, two fine horizontal rules and the exact Cyrillic words "ВАШ БРЕНД" repeated three times in bold simple sans serif. The ink is absorbed into kraft fibres with very subtle dry-print imperfections, slight natural density variation. Text lies physically on the cardboard and follows the box perspective. Text (verbatim): "ВАШ БРЕНД". No other text.
+Constraints: just the one branded cardboard box and tabletop. No roller, no hands, no other props, no shipping labels, no captions, no logos, no decorative icons, no watermark, no UI. This is a photographic visualization, not a vector illustration or glossy plastic render. Keep the printed side large and clearly readable in a small 540x200 website header.

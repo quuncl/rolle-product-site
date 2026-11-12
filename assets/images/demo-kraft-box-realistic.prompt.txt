@@ -1,0 +1,10 @@
+Generated with built-in image_gen. Photographic visualization; not a photo of a tested product.
+
+Use case: product-mockup.
+Asset type: photorealistic isolated kraft box asset for an interactive ROLLÉ packaging-printing demo.
+Primary request: a realistic unprinted closed brown corrugated cardboard mailer box, replacing a crude flat CSS box while leaving a clear front face for live ink overlays.
+Subject: one broad rectangular kraft shipping box, approximately 32 cm wide, 10 cm high at the front, 12 cm deep. Completely blank: no text, marks, tape, graphics, labels or logos.
+Composition: wide horizontal product shot, roughly 2.3:1 composition. Almost straight-on front elevation, slightly elevated so a narrow strip of the lid and a little of the right end are visible. The large front face is close to rectangular, with its long top and bottom edges horizontal; no camera roll, almost orthographic long-lens product photography. The blank front face fills most of the width and remains evenly lit for a later printing animation. Entire box plus subtle shadow fully inside the frame, generous transparent margin around silhouette.
+Materials and details: real fine kraft-paper fibres and tiny speckles, folded cardboard seams, die-cut tabs, slightly compressed corners, fine corrugated edge thickness, subtle manufacturing imperfections. Real matte cardboard, no shiny coating. Soft warm-neutral daylight from upper left, natural dimensional shading and a soft contact shadow beneath the box.
+Background: truly transparent alpha background around the isolated box and its soft contact shadow; no visible tabletop rectangle.
+Constraints: only the one box. No rollers, people, hands or props. No printed text of any kind. No UI, border, watermark. Photographic realism, not vector artwork, a diagram or a smooth plastic 3D render. Do not add strong perspective tilt or a diagonal front top edge.
