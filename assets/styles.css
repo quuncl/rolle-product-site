@@ -898,7 +898,7 @@ body{background:var(--paper)}
 /* Request dialog: paper card, clear summary, quiet next-step copy. */
 .request-dialog{
   width:min(560px,calc(100vw - 28px));
-  height:min(720px,calc(100dvh - 28px));
+  height:min(620px,calc(100dvh - 28px));
   max-height:calc(100dvh - 28px);
   margin:auto;
   border:1px solid #ddd4c6;
@@ -918,29 +918,19 @@ body{background:var(--paper)}
   container-type:inline-size;
   position:relative;
   display:grid;
-  grid-template-rows:auto minmax(0,1fr) auto;
+  grid-template-rows:minmax(0,1fr) auto;
   height:100%;
   min-height:0;
   gap:0;
   margin:0;
   padding:0;
 }
-.request-content{min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;padding:4px 24px 20px}
-.request-top{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  margin:0;
-  padding:16px 24px 8px;
-}
-.request-top .eyebrow{
-  margin:0;
-  color:#8a847a;
-  letter-spacing:.16em;
-}
+.request-content{min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;padding:24px 24px 20px}
+.request-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.request-heading h3{min-width:0}
 .request-dialog .close-dialog{
   position:static;
+  flex-shrink:0;
   width:44px;
   height:44px;
   display:grid;
@@ -977,45 +967,19 @@ body{background:var(--paper)}
   line-height:1.5;
   font-weight:500;
 }
-.request-summary{
-  display:grid;
-  gap:0;
-  margin:16px 0 0;
-  padding:12px 14px;
-  border:1px solid #e2d8ca;
-  border-radius:14px;
-  background:#fff;
-  font-size:13px;
-  line-height:1.35;
-}
-.request-summary-title{
-  margin:0 0 8px;
-  color:#8a847a;
-  font-size:11px;
-  font-weight:700;
-  letter-spacing:.08em;
-  text-transform:uppercase;
-}
-.request-summary-row{
-  display:grid;
-  grid-template-columns:92px minmax(0,1fr);
-  gap:6px 12px;
-  align-items:baseline;
-  padding:6px 0;
-  border-top:1px solid #efe7db;
-}
-.request-summary-row:first-of-type{border-top:0;padding-top:2px}
-.request-summary-key{
-  color:#8a847a;
-  font-size:12px;
-  font-weight:600;
-}
-.request-summary-val{
-  color:var(--ink);
-  font-size:14px;
-  font-weight:650;
-  overflow-wrap:anywhere;
-}
+/* The request carries a proof and a concise specification. */
+.request-summary{display:grid;gap:16px;margin:20px 0 0;padding:0;border:0;border-radius:0;background:transparent;font-size:13px;line-height:1.4}
+.request-summary-title{display:flex;align-items:center;justify-content:space-between;gap:16px;color:#55594f;font-size:12px;font-weight:600}
+.request-summary-title button{padding:4px 0;border:0;border-bottom:1px solid #b64a36;background:transparent;color:#a83b29;font-size:12px;font-weight:600}
+.request-imprint{display:grid;place-items:center;min-height:110px;padding:26px 20px;background:repeating-linear-gradient(87deg,#84603b09 0 1px,transparent 1px 4px),linear-gradient(120deg,#d6b588,#bd986a)}
+.request-imprint[data-surface="white"]{background:linear-gradient(120deg,#fffef9,#e9e6dc)}
+.request-imprint[data-surface="dark"]{background:linear-gradient(120deg,#454740,#252822)}
+.request-imprint-band{width:100%;padding:6px 0;border-block:2px solid currentColor;color:var(--proof-ink);text-align:center;font-size:clamp(18px,5cqi,30px);font-weight:800;line-height:1.2;overflow-wrap:anywhere;letter-spacing:-.04em}
+.request-imprint-logo{display:block;width:100%;height:42px;background:currentColor;mask-size:contain;mask-position:center;mask-repeat:no-repeat}
+.request-summary-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 22px;margin:0;padding:0 0 16px;border-bottom:1px solid #d7cec0}
+.request-summary .request-summary-row{display:block;min-width:0;padding:0;border:0}
+.request-summary-key{margin:0 0 3px;color:#79766d;font-size:11px;font-weight:500}
+.request-summary-val{margin:0;color:var(--ink);font-size:13px;font-weight:600;overflow-wrap:anywhere}
 .request-fields{
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
@@ -1090,7 +1054,7 @@ body{background:var(--paper)}
   text-align:left;
 }
 @media(max-width:520px){
-  .request-content{padding:4px 18px 18px}
+  .request-content{padding:18px}
   .request-top{padding:12px 18px 8px}
   .request-actions{padding:12px 18px 14px}
   .request-summary-row{grid-template-columns:90px minmax(0,1fr);gap:6px 10px}
@@ -1100,23 +1064,27 @@ body{background:var(--paper)}
   display:grid;
   grid-template-columns:auto minmax(0,1fr) auto;
   align-items:center;
-  gap:16px 24px;
+  gap:12px 24px;
+  padding-block:24px;
 }
+.site-footer .brand img{width:108px;height:auto}
+.site-footer > a:last-child{white-space:nowrap;min-height:40px;display:flex;align-items:center;justify-content:flex-end}
 .footer-copy{
   display:flex;
   flex-direction:column;
-  gap:6px;
+  gap:4px;
   min-width:0;
 }
 .footer-copy>span{
   color:#a1a1a6;
   font-size:10px;
   font-weight:750;
-  letter-spacing:.08em;
+  letter-spacing:.04em;
+  line-height:1.4;
 }
 .footer-concept{
   margin:0;
-  max-width:42ch;
+  max-width:56ch;
   color:#a7a49c;
   font-size:12px;
   line-height:1.45;
@@ -1127,6 +1095,7 @@ body{background:var(--paper)}
 @media(max-width:700px){
   .site-footer{
     grid-template-columns:1fr auto;
+    padding-block:20px;
   }
   .footer-copy{grid-column:1 / -1;order:3}
 }
@@ -1615,7 +1584,7 @@ body{background:var(--paper)}
 #details .compare,#details .compare-before{background:radial-gradient(ellipse at 50% 35%,#f7f2e8,#ded3c0)}
 .comparison-box{position:absolute;width:min(92%,620px);aspect-ratio:1448 / 1086;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-2deg)}
 .comparison-box-photo{display:block;width:100%;height:100%;object-fit:contain}
-.comparison-print-surface .package-print{left:4%;right:auto;width:92%;top:50%;transform:translateY(-50%);padding:4px 0;min-height:28px;border-width:2px;opacity:.94}
+.comparison-print-surface .package-print{left:4%;right:auto;width:92%;top:50%;transform:translateY(-50%);padding:8px 0;min-height:40px;border-width:2px;font-size:clamp(22px,3.5vw,38px);opacity:.94}
 @media(max-width:740px){
   .preview-interaction-bar{align-items:flex-start}
   .preview-interaction-bar p{max-width:25ch;padding-top:4px}
@@ -1625,11 +1594,11 @@ body{background:var(--paper)}
 
 /* A physical tool is the print control on the work surface. */
 #previewPrintCursor{
-  width:clamp(54px,9vw,80px);
-  height:clamp(105px,18vw,155px);
+  width:clamp(74px,12vw,108px);
+  height:clamp(140px,24vw,210px);
   left:0;
   padding:0;
-  transform:translate(-50%,-94%) rotate(-12deg);
+  transform:translate(-50%,-90%);
   transform-origin:50% 95%;
   border:0;
   background:transparent;
@@ -1638,11 +1607,11 @@ body{background:var(--paper)}
   cursor:grab;
   touch-action:none;
   z-index:5;
-  filter:drop-shadow(7px 9px 4px #0003);
+  filter:drop-shadow(4px 5px 3px #0002);
 }
 #previewPrintCursor::before{content:none}
 #previewPrintCursor img{width:100%;height:100%;object-fit:contain;transform:rotate(180deg);pointer-events:none;user-select:none}
-#previewPrintCursor.is-rolling{cursor:grabbing;transform:translate(-50%,-94%) rotate(-7deg)}
+#previewPrintCursor.is-rolling{cursor:grabbing}
 #previewPrintCursor:focus-visible{outline:2px solid #a83b29;outline-offset:4px;border-radius:8px}
 #customizer .preview-print-surface{overflow:visible}
 #customizer .preview-board{overflow:visible}
@@ -1670,3 +1639,14 @@ body{background:var(--paper)}
 #customizer .surface-switch button:hover::before{border-color:#c4523d}
 #customizer .surface-switch button:focus-visible{outline:2px solid #a83b29;outline-offset:5px}
 @media(max-width:380px){#customizer .surface-switch{gap:8px}}
+#previewPrintCursor .roller-model-canvas{pointer-events:none;filter:none;transform:none}
+#previewPrintCursor[data-model-ready="loading"] > img{visibility:hidden}
+
+.stamp-unit{display:inline-flex;align-items:center;justify-content:center;gap:.28em;flex-shrink:0;white-space:nowrap}
+#previewRepeat .stamp-unit .mask-logo,.stamp-unit .edge-logo,.stamp-unit .request-imprint-logo{display:inline-block;flex:0 0 1.5em;width:1.5em;height:1em;margin:0;mask-size:contain;mask-repeat:no-repeat;mask-position:center}
+.request-imprint-band .stamp-unit{max-width:100%;white-space:normal;overflow-wrap:anywhere}
+
+/* Logokat wordmark shares the coral ink of the primary action. */
+.site-header .brand img{height:32px;width:auto}
+.site-footer .brand img{height:27px;width:auto}
+@media(max-width:520px){.site-header .brand img{height:29px}}

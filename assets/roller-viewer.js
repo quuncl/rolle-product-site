@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { advancePose, takePoseControl, cameraFrame } from './roller-motion.js?v=60';
 import { bodyParts, prepareModel, createPartMaterial, lightStudio } from './roller-appearance.js?v=58';
-import { createPrintScene } from './roller-print-scene.js?v=66';
+import { createPrintScene } from './roller-print-scene.js?v=84';
 
 // The supplied assembly is in metres, Y-up. Keep its geometry and part placement.
 const modelURL = new URL('./models/roller.glb', import.meta.url);
@@ -24,7 +24,7 @@ function selectedColor() {
 function showModelState(view, state) {
   if (view.host.dataset.modelReady === state) return;
   const ready = state === 'true';
-  const interactive = ready && view.kind !== 'demo';
+  const interactive = ready && view.kind === 'engineering';
   view.host.dataset.modelReady = state;
   view.host.setAttribute('aria-busy', String(state === 'loading'));
   if (view.canvas) {
@@ -55,7 +55,7 @@ async function load(view) {
     canvas.tabIndex = -1;
     canvas.setAttribute('aria-hidden', 'true');
     canvas.setAttribute('role', 'img');
-    canvas.setAttribute('aria-label', '3D-концепт роллера ROLLÉ. Перетаскивайте для вращения или используйте стрелки. Home возвращает исходный ракурс.');
+    canvas.setAttribute('aria-label', '3D-концепт роллера Логокат. Перетаскивайте для вращения или используйте стрелки. Home возвращает исходный ракурс.');
     view.canvas = canvas;
     view.renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'low-power' });
     view.renderer.setClearColor(0, 0);
@@ -78,7 +78,7 @@ async function load(view) {
       showModelState(view, 'loading');
       requestFrame();
     });
-    if (view.kind !== 'demo') bindRotation(view);
+    if (view.kind === 'engineering') bindRotation(view);
     new ResizeObserver(requestFrame).observe(view.host);
     // All scenes share one download and immutable buffers, with separate materials.
     modelPromise ||= new GLTFLoader().loadAsync(modelURL.href).then(gltf => ({scene:prepareModel(gltf.scene)}));
@@ -116,6 +116,13 @@ async function load(view) {
       view.wheelRadiusWorld = Math.max(sleeveSize.x, sleeveSize.y) * model.scale.x / 2;
     }
     view.rotator.add(model);
+    if (view.kind === 'customizer') {
+      view.rotator.rotation.set(0, .35, 0);
+      view.tilt.rotation.z = Math.PI + .04;
+      view.tilt.updateWorldMatrix(true, true);
+      view.previewBounds = new THREE.Box3().setFromObject(view.tilt);
+      view.previewWheelCenter = view.wheel.getWorldPosition(new THREE.Vector3());
+    }
     if (view.kind === 'demo') {
       view.printScene = await createPrintScene(view);
       view.host.dispatchEvent(new CustomEvent('roller-demo-request-design'));
@@ -167,6 +174,21 @@ function resizeView(view, width, height, dpr) {
   renderer.setSize(width, height, false);
   const fixed = view.kind === 'demo';
   if (fixed) view.printScene.resize(width, height);
+  else if (view.kind === 'customizer') {
+    const bounds = view.previewBounds;
+    const wheel = view.previewWheelCenter;
+    const margin = .04;
+    const bottom = wheel.y - view.wheelRadiusWorld - margin;
+    const top = bounds.max.y + margin;
+    const aspect = width / height;
+    const halfWidth = Math.max(wheel.x - bounds.min.x, bounds.max.x - wheel.x) + margin;
+    const half = Math.max((top - bottom) / 2, halfWidth / aspect);
+    Object.assign(camera, {left:-half * aspect, right:half * aspect, top:half, bottom:-half});
+    camera.position.set(wheel.x, bottom + half, 8);
+    camera.lookAt(wheel.x, bottom + half, 0);
+    camera.updateProjectionMatrix();
+    camera.updateMatrixWorld();
+  }
   else {
     Object.assign(camera, cameraFrame(view.framingRadius, width / height));
     camera.position.set(0, 0, 8);
@@ -194,10 +216,11 @@ function render(now) {
       resizeView(view, width, height, dpr);
     }
     const fixed = view.kind === 'demo';
-    const rolling = !fixed && !motion.matches && Boolean(view.wheel);
+    const preview = view.kind === 'customizer';
+    const rolling = !fixed && !preview && !motion.matches && Boolean(view.wheel);
     const elapsed = view.lastTime == null ? 0 : Math.min((now - view.lastTime) / 1000, .05);
     view.lastTime = now;
-    const auto = !fixed && advancePose(view, elapsed, {reducedMotion:motion.matches});
+    const auto = !fixed && !preview && advancePose(view, elapsed, {reducedMotion:motion.matches});
     if (rolling) {
       // One complete turn every four seconds, independent of display frame rate.
       view.wheelAngle = (view.wheelAngle - elapsed * Math.PI / 2) % (Math.PI * 2);
@@ -205,6 +228,10 @@ function render(now) {
     }
     if (fixed) {
       view.printScene.update(view.printPose);
+    } else if (preview) {
+      rotator.rotation.set(0, .35, 0);
+      tilt.rotation.z = Math.PI + .04;
+      if (view.wheel) view.wheel.rotation.z = -(view.printProgress || 0) * 4.06 / view.wheelRadiusWorld;
     } else {
       rotator.rotation.set(.2 + view.displayedPitch, .6 + view.displayedYaw, 0);
       tilt.rotation.z = -.24;
@@ -222,6 +249,12 @@ function render(now) {
 for (const host of document.querySelectorAll('[data-roller-viewer]')) {
   const view = {host, kind:host.dataset.rollerViewer, visible:false, yaw:0, pitch:0, displayedYaw:0, displayedPitch:0, phase:0};
   views.push(view);
+  if (view.kind === 'customizer') {
+    host.addEventListener('roller-preview-progress', event => {
+      view.printProgress = event.detail.progress;
+      requestFrame();
+    });
+  }
   if (view.kind === 'demo') {
     host.addEventListener('roller-demo-state', event => {
       view.printPose = event.detail;

@@ -202,20 +202,21 @@ export async function createPrintScene(view) {
       inkCtx.fillRect(printStart, lineY, printEnd - printStart, lineThickness);
     }
     inkCtx.textAlign = 'center'; inkCtx.textBaseline = 'middle';
-    const label = design.brand || 'ВАШ БРЕНД';
+    const label = image ? design.brand.trim() : design.brand || 'ВАШ БРЕНД';
     let fontSize = band * .8;
     inkCtx.font = `800 ${fontSize}px Arial, sans-serif`;
-    fontSize *= Math.min(1, repeat * .83 / inkCtx.measureText(label).width);
+    fontSize *= Math.min(1, repeat * (image && label ? .48 : .83) / (inkCtx.measureText(label).width || 1));
     inkCtx.font = `800 ${fontSize}px Arial, sans-serif`;
     for (let x = printStart + repeat / 2; x < printEnd; x += repeat) {
       if (image) {
-        const ratio = Math.min(repeat * .82 / image.naturalWidth, band * .78 / image.naturalHeight);
+        const ratio = Math.min(repeat * (label ? .28 : .82) / image.naturalWidth, band * .78 / image.naturalHeight);
         const iw = image.naturalWidth * ratio, ih = image.naturalHeight * ratio;
         const stamp = document.createElement('canvas'); stamp.width = Math.ceil(iw); stamp.height = Math.ceil(ih);
         const stampCtx = stamp.getContext('2d');
         stampCtx.drawImage(image, 0, 0, iw, ih); stampCtx.globalCompositeOperation = 'source-in';
         stampCtx.fillStyle = design.ink; stampCtx.fillRect(0, 0, stamp.width, stamp.height);
-        inkCtx.drawImage(stamp, x - iw / 2, centerY - ih / 2);
+        inkCtx.drawImage(stamp, x - (label ? repeat * .29 : 0) - iw / 2, centerY - ih / 2);
+        if (label) inkCtx.fillText(label, x + repeat * .14, centerY);
       } else inkCtx.fillText(label, x, centerY);
     }
     // Small gaps let the paper show through the pigment instead of looking like vinyl.

@@ -1,7 +1,7 @@
 import { createRequestValidation } from './request-validation.js?v=53';
 import { printFrameAt, PRINT_TIMING } from './roller-print-motion.js?v=66';
 
-/* ROLLÉ — product photography, scroll presentation and local customizer. */
+/* Логокат — product photography, scroll presentation and local customizer. */
 (() => {
 'use strict';
 const $ = (q, root=document) => root.querySelector(q);
@@ -95,8 +95,8 @@ function showPhotoViews(sidePhoto, frontPhoto, progress){
   sidePhoto.style.opacity = 1 - frontOpacity;
   frontPhoto.style.opacity = frontOpacity;
   sidePhoto.alt = frontOpacity > .5
-    ? 'Прототип роллера ROLLÉ, вид спереди'
-    : 'Прототип роллера ROLLÉ, вид сбоку';
+    ? 'Прототип роллера Логокат, вид спереди'
+    : 'Прототип роллера Логокат, вид сбоку';
 }
 
 const engineering = $('#engineering');
@@ -176,6 +176,27 @@ const demoPath = $('#printPath'), demoRoller = $('#demoRoller'), demoText = $('#
 const demoInks = ['#262924', '#ce503f', '#346a9f'];
 let demoInk = demoInks[0];
 function edgeLabel(){return cfg.brand || 'ВАШ БРЕНД';}
+function makeStamp(logoClass, ink){
+  const stamp = document.createElement('span');
+  stamp.className = 'stamp-unit';
+  if (cfg.logo){
+    const logo = document.createElement('span');
+    logo.className = logoClass;
+    logo.style.backgroundColor = ink;
+    logo.style.mask = `url("${cfg.logo}") center / contain no-repeat`;
+    logo.style.webkitMask = logo.style.mask;
+    logo.setAttribute('role', 'img');
+    logo.setAttribute('aria-label', cfg.logoName || 'Логотип');
+    stamp.append(logo);
+  }
+  const label = cfg.logo ? cfg.brand.trim() : edgeLabel();
+  if (label){
+    const text = document.createElement('span');
+    text.textContent = label;
+    stamp.append(text);
+  }
+  return stamp;
+}
 function fillEdge(container, available, split){
   container.replaceChildren();
   container.style.fontSize = '';
@@ -185,30 +206,18 @@ function fillEdge(container, available, split){
   available = Math.max(0, available - parseFloat(box.paddingLeft || 0) - parseFloat(box.paddingRight || 0));
   if (!available) return;
   const ink = container === demoText ? demoInk : cfg.ink;
-  const make = () => {
-    if (cfg.logo){
-      const mark = document.createElement('span');
-      mark.className = 'edge-logo';
-      mark.style.backgroundColor = ink;
-      mark.style.mask = `url("${cfg.logo}") center / contain no-repeat`;
-      mark.style.webkitMask = mark.style.mask;
-      return mark;
-    }
-    const copy = document.createElement('span');
-    copy.textContent = edgeLabel();
-    return copy;
-  };
+  const make = () => makeStamp('edge-logo', ink);
   const probe = make();
   container.append(probe);
   let item = probe.offsetWidth || 1;
-  if (!cfg.logo && item > available){
+  if (item > available){
     const base = parseFloat(getComputedStyle(container).fontSize) || 18;
     container.style.fontSize = Math.max(12, base * available / item * 0.9) + 'px';
     item = probe.offsetWidth || available;
   }
   probe.remove();
   let used = 0;
-  const limit = split ? 2 : 6;
+  const limit = split ? 1 : 6;
   while (used + item <= available + 1 && container.childElementCount < limit){
     container.append(make());
     used += item + gap;
@@ -564,25 +573,12 @@ function repeatNode(){
   container.style.gap = gap + 'px';
   if (!available) return;
 
-  const addCopy = () => {
-    if (cfg.logo){
-      const img = document.createElement('span');
-      img.className = 'mask-logo';
-      img.style.display = 'inline-block';
-      img.style.backgroundColor = cfg.ink;
-      img.style.mask = `url("${cfg.logo}") center / contain no-repeat`;
-      img.style.webkitMask = img.style.mask;
-      return img;
-    }
-    const text = document.createElement('span');
-    text.textContent = cfg.brand || 'ВАШ БРЕНД';
-    return text;
-  };
+  const addCopy = () => makeStamp('mask-logo', cfg.ink);
 
   const probe = addCopy();
   container.append(probe);
   let itemWidth = probe.offsetWidth;
-  if (!cfg.logo && itemWidth > available){
+  if (itemWidth > available){
     const base = parseFloat(getComputedStyle(container).fontSize) || 24;
     container.style.fontSize = Math.max(13, base * available / itemWidth * 0.92) + 'px';
     itemWidth = probe.offsetWidth;
@@ -607,7 +603,7 @@ function paintDensity(range){
   range.style.setProperty('--density-fill', pct + '%');
   range.setAttribute('aria-valuetext', densityLabel(value));
 }
-function renderConfig(){const board=$('#previewBoard');board.dataset.surface=cfg.surface;$('#previewBand').style.setProperty('--ink',cfg.ink);$('#previewPrintSurface').style.mixBlendMode=cfg.ink.toLowerCase()==='#f8f6e9'?'normal':'multiply';repeatNode();paintEdges();$('#densityValue').textContent=densityLabel(cfg.density);paintDensity($('#densityRange'));customizerUI?.onConfigChange();}
+function renderConfig(){const board=$('#previewBoard');board.dataset.surface=cfg.surface;$('#previewBand').style.setProperty('--ink',cfg.ink);$('#previewBand').style.mixBlendMode=cfg.ink.toLowerCase()==='#f8f6e9'?'normal':'multiply';repeatNode();paintEdges();$('#densityValue').textContent=densityLabel(cfg.density);paintDensity($('#densityRange'));customizerUI?.onConfigChange();}
 $('#brandInput').addEventListener('input',e=>{cfg.brand=e.target.value.slice(0,22).toUpperCase();renderConfig();});
 $$('#builderSwatches .builder-swatch').forEach(s=>s.addEventListener('click',()=>{cfg.ink=s.dataset.color;$$('#builderSwatches .builder-swatch').forEach(t=>{t.classList.toggle('active',t===s);t.setAttribute('aria-pressed',String(t===s));});renderConfig();}));
 $$('.surface-switch button').forEach(s=>s.addEventListener('click',()=>{cfg.surface=s.dataset.surface;$$('.surface-switch button').forEach(t=>{t.classList.toggle('active',t===s);t.setAttribute('aria-pressed',String(t===s));});renderConfig();}));
@@ -617,7 +613,7 @@ $('#resetLogo').addEventListener('click',()=>{cfg.logo=null;cfg.logoName=null;cf
 setLogoCheck(logoIdle,'');
 renderConfig();
 if (demoBoxPhoto.complete) markDemoBoxLoaded();
-import('./customizer-interactions.js?v=75').then(({initCustomizerInteractions}) => {
+import('./customizer-interactions.js?v=85').then(({initCustomizerInteractions}) => {
   customizerUI = initCustomizerInteractions({
     config: cfg,
     onPositionChange(position){ cfg.position = position; $('#comparePrint').style.top = position + '%'; },
@@ -633,9 +629,9 @@ if ('ResizeObserver' in window){
     }
   }).observe($('#previewBand'));
 }
-const escapeXML=s=>String(s).replace(/[<>&"']/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&apos;'}[c]));
+
 function download(name,content,type){const blob=new Blob([content],{type}),url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);}
-$('#downloadSvg').addEventListener('click',()=>{const col=cfg.ink;const gap=Math.round(densityGap(cfg.density,320,240,170));let repeat='';for(let i=0;i<5;i++){const x=20+i*gap;if(cfg.logo){repeat+=`<image x="${x}" y="30" width="145" height="80" href="${escapeXML(cfg.logo)}" preserveAspectRatio="xMidYMid meet" />`;}else{repeat+=`<text x="${x}" y="84" fill="${col}" font-size="39" font-family="Arial, sans-serif" font-weight="900">${escapeXML(cfg.brand||'ВАШ БРЕНД')}</text>`;}}const bg=cfg.surface==='kraft'?'#c9a575':cfg.surface==='dark'?'#3c413c':'#ece9df';const note=escapeXML(cfg.logoNote||'Эскиз для обсуждения. Не использовать как файл для изготовления клише.');const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="180" viewBox="0 0 1200 180"><rect width="1200" height="180" fill="${bg}"/><path d="M0 18H1200 M0 142H1200" stroke="${col}" stroke-width="4"/>${repeat}<text x="24" y="168" fill="#6e6e73" font-size="14" font-family="Arial, sans-serif">${note}</text></svg>`;download('rolle-eskiz.svg',svg,'image/svg+xml;charset=utf-8');});
+
 
 // Before / after drag interaction.
 const compareRange=$('#compareRange');function updateCompare(v){const percent=clamp(Number(v)||0,0,100);$('#compareBefore').style.clipPath=`inset(0 ${100-percent}% 0 0)`;$('#compareDivider').style.left=percent+'%';compareRange.setAttribute('aria-valuetext',`${percent}% чистой коробки, ${100-percent}% с оттиском`);}compareRange.addEventListener('input',e=>updateCompare(e.target.value));updateCompare(compareRange.value);
@@ -646,26 +642,49 @@ const inkNames={'#252923':'Чёрный','#ce503f':'Красный','#f8f6e9':'�
 const inkLabel=()=>inkNames[String(cfg.ink).toLowerCase()]||cfg.ink;
 const surfaceLabel=()=>surfaceNames[cfg.surface]||cfg.surface;
 const logoLabel=()=>cfg.logoName||'Не загружен';
-function requestText(){return `ROLLÉ — ЗАЯВКА НА ПЕРСОНАЛЬНЫЙ РОЛЛЕР\n\nЭто макет для обсуждения с производителем, не заказ и не счёт.\n\nБренд: ${cfg.brand||'без названия'}\nЦвет оттиска: ${inkLabel()}\nПоверхность: ${surfaceLabel()}\nИнтервал повторения: ${densityLabel(cfg.density)}\nПоложение оттиска: ${cfg.position}% высоты упаковки (эскиз)\nЗагруженный логотип: ${logoLabel()}\nИмя: ${$('#customerName').value.trim()||'не указано'}\nКонтакт: ${$('#customerContact').value.trim()||'не указан'}\n\nДальше: файл можно переслать производителю. Цена, срок, наличие и гарантия цвета печати не зафиксированы — их подтверждают отдельно после проверки макета.\n`;}
+function requestText(){return `Логокат — ЗАЯВКА НА ПЕРСОНАЛЬНЫЙ РОЛЛЕР\n\nЭто макет для обсуждения с производителем, не заказ и не счёт.\n\nБренд: ${cfg.brand||'без названия'}\nЦвет оттиска: ${inkLabel()}\nПоверхность: ${surfaceLabel()}\nИнтервал повторения: ${densityLabel(cfg.density)}\nПоложение оттиска: ${cfg.position}% высоты упаковки (эскиз)\nЗагруженный логотип: ${logoLabel()}\nИмя: ${$('#customerName').value.trim()||'не указано'}\nКонтакт: ${$('#customerContact').value.trim()||'не указан'}\n\nДальше: файл можно переслать производителю. Цена, срок, наличие и гарантия цвета печати не зафиксированы — их подтверждают отдельно после проверки макета.\n`;}
 $('#requestBtn').addEventListener('click',()=>{
   const summary=$('#requestSummary');
   summary.replaceChildren();
-  const title=document.createElement('p');
+  const title=document.createElement('div');
   title.className='request-summary-title';
-  title.textContent='Параметры оттиска';
+  const caption=document.createElement('span');
+  caption.textContent='Ваш оттиск';
+  const edit=document.createElement('button');
+  edit.type='button';
+  edit.textContent='Изменить';
+  edit.addEventListener('click',()=>{
+    $('#requestDialog').close();
+    $('#brandInput').focus();
+  });
+  title.append(caption,edit);
   summary.append(title);
-  [['Название',cfg.brand||'—'],['Цвет',inkLabel()],['Материал',surfaceLabel()],['Повторение',densityLabel(cfg.density)],['Расположение',cfg.position===50?'По центру':cfg.position+'% высоты'],['Логотип',logoLabel()]].forEach(([key,value])=>{
+  const proof=document.createElement('div');
+  proof.className='request-imprint';
+  proof.dataset.surface=cfg.surface;
+  proof.style.setProperty('--proof-ink',cfg.ink);
+  const stamp=document.createElement('div');
+  stamp.className='request-imprint-band';
+  stamp.append(makeStamp('request-imprint-logo', cfg.ink));
+  proof.append(stamp);
+  summary.append(proof);
+  const facts=document.createElement('dl');
+  facts.className='request-summary-facts';
+  const details=[['Цвет печати',inkLabel()],['Материал',surfaceLabel()],['Повторение',densityLabel(cfg.density)],['Положение',cfg.position===50?'По центру':cfg.position+'% высоты']];
+  if(cfg.logo) details.push(['Логотип',logoLabel()],['Название',cfg.brand||'—']);
+  details.forEach(([key,value])=>{
     const row=document.createElement('div');
     row.className='request-summary-row';
-    const label=document.createElement('span');
+    const label=document.createElement('dt');
     label.className='request-summary-key';
     label.textContent=key;
-    const val=document.createElement('span');
+    const val=document.createElement('dd');
     val.className='request-summary-val';
     val.textContent=value;
     row.append(label,val);
-    summary.append(row);
+    facts.append(row);
   });
+  summary.append(facts);
   $('#requestDialog').showModal();
   $('#requestDialog .request-content').scrollTop = 0;
   $('#requestTitle').focus({preventScroll:true});
@@ -675,7 +694,7 @@ $('#requestForm').addEventListener('submit', event => {
   event.preventDefault();
   if (!requestValidation.validateAndNormalize()) return;
   const val = requestText();
-  download('ROLLE-order-request.txt', val, 'text/plain;charset=utf-8');
+  download('logokat-zayavka.txt', val, 'text/plain;charset=utf-8');
   $('#requestDialog').close();
 });
 $('#requestDialog .close-dialog').addEventListener('click', () => $('#requestDialog').close());

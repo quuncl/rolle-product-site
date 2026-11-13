@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#161617" />
-  <meta name="description" content="ROLLÉ — ручной роллер для нанесения логотипа на коробки и бумажную упаковку. Посмотрите принцип печати и примерьте свой логотип в конструкторе оттиска." />
-  <meta property="og:title" content="ROLLÉ — ваш бренд одним движением" />
+  <meta name="description" content="Логокат — ручной роллер для нанесения логотипа на коробки и бумажную упаковку. Посмотрите принцип печати и примерьте свой логотип в конструкторе оттиска." />
+  <meta property="og:title" content="Логокат — прокати свой логотип" />
   <meta property="og:description" content="Интерактивная 3D-презентация роллера для брендирования упаковки." />
-  <title>ROLLÉ — оставьте свой след.</title>
-  <link rel="icon" type="image/svg+xml" href="./assets/images/rolle-mark.svg" />
-  <link rel="stylesheet" href="./assets/styles.css?v=75" />
+  <title>Логокат — прокати свой логотип</title>
+  <link rel="icon" type="image/svg+xml" href="./assets/images/logokat-mark.svg" />
+  <link rel="stylesheet" href="./assets/styles.css?v=86" />
   <noscript><style>
     [data-roller-viewer] > img:first-of-type{visibility:visible;opacity:1!important}
     .roller-model-status{display:none!important}
@@ -27,14 +27,14 @@
     }
   }
   </script>
-  <script type="module" src="./assets/app.js?v=75"></script>
+  <script type="module" src="./assets/app.js?v=86"></script>
   <script defer src="./assets/preview-offer.js?v=47"></script>
-  <script type="module" src="./assets/roller-viewer.js?v=67"></script>
+  <script type="module" src="./assets/roller-viewer.js?v=86"></script>
 </head>
 <body>
   <div id="scroll-progress" class="scroll-progress" aria-hidden="true"></div>
   <header class="site-header" id="top">
-    <a class="brand" href="#top" aria-label="ROLLÉ, на главную"><img src="./assets/images/rolle-logo.svg" width="128" height="36" alt="ROLLÉ" /></a>
+    <a class="brand" href="#top" aria-label="Логокат, на главную"><img src="./assets/images/logokat-logo.svg" width="143" height="36" alt="Логокат" /></a>
     <nav class="desktop-nav" aria-label="Основная навигация">
       <a href="#product">Продукт</a><a href="#demo">Как работает</a><a href="#customizer">Конструктор</a><a href="#details">Результат</a>
     </nav>
@@ -46,8 +46,8 @@
     <div id="hero">
       <section class="hero section-pad" id="demo" aria-labelledby="heroTitle">
         <div class="hero-copy">
-          <h1 id="heroTitle">Ваш логотип<br>на упаковке.</h1>
-          <p class="hero-lead">Ручной роллер для печати на коробках и&nbsp;бумажных пакетах.</p>
+          <h1 id="heroTitle">Прокати свой<br>логотип.</h1>
+          <p class="hero-lead">Логокат — ручной роллер для печати на коробках и&nbsp;бумажных пакетах.</p>
           <div class="hero-ctas">
             <a href="#customizer" class="btn btn-accent hero-primary-cta">Примерить свой логотип <span aria-hidden="true">↘</span></a>
           </div>
@@ -197,33 +197,19 @@
       </div>
       <div class="builder-shell">
         <div class="builder-preview">
-          <div class="preview-toolbar">
-            <span class="preview-material-label" id="previewMaterial">Крафт</span>
-            <button type="button" class="preview-run" id="previewRun">Прокатить <span aria-hidden="true">↗</span></button>
-          </div>
           <div class="preview-stage">
             <div class="preview-board" id="previewBoard">
               <img class="preview-box-photo" src="./assets/images/customizer-box-realistic.webp"
                 width="1448" height="1086" alt="" aria-hidden="true" loading="lazy" decoding="async" />
               <div class="preview-print-surface" id="previewPrintSurface">
-                <div class="preview-band" id="previewBand" role="slider" tabindex="0" aria-label="Положение оттиска на упаковке" aria-orientation="vertical" aria-valuemin="15" aria-valuemax="85" aria-valuenow="50" aria-valuetext="По центру, 50%" aria-describedby="previewDragHint"><div class="preview-repeat" id="previewRepeat"></div></div>
-                <button type="button" class="preview-print-cursor" id="previewPrintCursor" role="slider" aria-label="Прокатка роллера" aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-describedby="previewDragHint"><img src="./assets/images/roller-smooth-side.webp" width="941" height="1672" alt="" draggable="false" loading="lazy" /></button>
+                <div class="preview-band" id="previewBand" role="slider" tabindex="0" aria-label="Положение оттиска на упаковке" aria-orientation="vertical" aria-valuemin="15" aria-valuemax="85" aria-valuenow="50" aria-valuetext="По центру, 50%"><div class="preview-repeat" id="previewRepeat"></div></div>
+                <button type="button" class="preview-print-cursor" id="previewPrintCursor" data-roller-viewer="customizer" data-model-ready="loading" role="slider" aria-label="Прокатка роллера" aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><img src="./assets/images/roller-smooth-side.webp" width="941" height="1672" alt="" draggable="false" loading="lazy" /></button>
               </div>
             </div>
           </div>
-          <div class="preview-interaction-bar">
-            <p id="previewDragHint">Тяните роллер вправо для печати. Оттиск можно двигать вверх и вниз.</p>
-            <button type="button" class="preview-center" id="previewCenter">По центру</button>
-          </div>
-          <p class="preview-live-status" id="previewLiveStatus" role="status">Настройте оттиск и нажмите «Прокатить».</p>
-          <div class="preview-footer">
-            <span>Предпросмотр оттиска</span>
-            <button type="button" id="downloadSvg" class="inline-action">Скачать эскиз SVG <span aria-hidden="true">↓</span></button>
-          </div>
-          <p class="preview-export-note" id="svgExportNote">SVG содержит эскиз полосы оттиска, не файл для изготовления клише.</p>
         </div>
         <div class="builder-panel">
-          <label for="brandInput" class="field-label">Название бренда</label>
+          <label for="brandInput" class="field-label">Текст оттиска</label>
           <input id="brandInput" class="brand-input" value="ВАШ БРЕНД" maxlength="22" spellcheck="false" aria-describedby="brandHelp" />
           <small id="brandHelp">До 22 символов</small>
           <label for="logoUpload" class="file-input-label">Загрузить логотип <span>PNG, JPG, SVG</span><input type="file" id="logoUpload" accept="image/png,image/jpeg,image/svg+xml" /></label>
@@ -248,7 +234,6 @@
           <label for="densityRange" class="field-label">Интервал повторения <span id="densityValue">Средний</span></label>
           <input id="densityRange" class="density-range" type="range" min="1" max="3" value="2" step="0.01" aria-valuetext="Средний" />
           <button class="btn btn-accent btn-full" id="requestBtn" type="button">Подготовить заявку</button>
-          <p class="micro-note">Сохраните конфигурацию для обсуждения с производителем.</p>
         </div>
       </div>
     </section>
@@ -309,7 +294,7 @@
     </section>
   </main>
   <footer class="site-footer">
-    <a class="brand" href="#top" aria-label="ROLLÉ, наверх"><img src="./assets/images/rolle-logo.svg" width="128" height="36" alt="ROLLÉ" /></a>
+    <a class="brand" href="#top" aria-label="Логокат, наверх"><img src="./assets/images/logokat-logo.svg" width="143" height="36" alt="Логокат" /></a>
     <div class="footer-copy">
       <span>РОЛЛЕР ДЛЯ БРЕНДИРОВАНИЯ УПАКОВКИ</span>
       <p class="footer-concept">Сайт показывает концепт прототипа. Наличие, цена и качество печати ещё не подтверждены.</p>
@@ -335,15 +320,13 @@
     </div>
   </dialog>
 
-  <dialog id="requestDialog" class="request-dialog" aria-labelledby="requestTitle" aria-describedby="requestLead">
+  <dialog id="requestDialog" class="request-dialog" aria-labelledby="requestTitle">
     <form method="dialog" class="request-form" id="requestForm" novalidate>
-      <header class="request-top">
-        <span class="eyebrow dark">ROLLÉ / ЗАЯВКА</span>
-        <button class="close-dialog" type="button" aria-label="Закрыть">×</button>
-      </header>
       <div class="request-content">
-        <h3 id="requestTitle" tabindex="-1">Сохранить конфигурацию</h3>
-        <p class="request-lead" id="requestLead">Скачайте параметры оттиска для обсуждения с&nbsp;производителем. Это предварительная заявка, не&nbsp;заказ.</p>
+        <div class="request-heading">
+          <h3 id="requestTitle" tabindex="-1">Сохранить конфигурацию</h3>
+          <button class="close-dialog" type="button" aria-label="Закрыть">×</button>
+        </div>
         <section class="request-summary" id="requestSummary" aria-label="Параметры конфигурации"></section>
         <div class="request-fields">
           <div class="request-field">
@@ -358,8 +341,6 @@
       </div>
       <div class="request-actions">
         <button class="btn btn-accent btn-full" type="submit" id="saveRequest">Скачать заявку <span aria-hidden="true">↓</span></button>
-        <p class="request-next">Передайте файл производителю: цену и&nbsp;сроки согласуют отдельно.</p>
-        <small>Файл останется у вас. Данные с сайта не отправляются.</small>
       </div>
     </form>
   </dialog>
