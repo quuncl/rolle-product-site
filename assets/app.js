@@ -175,7 +175,7 @@ if (engineering){
 const demoPath = $('#printPath'), demoRoller = $('#demoRoller'), demoText = $('#printContent');
 const demoInks = ['#262924', '#ce503f', '#346a9f'];
 let demoInk = demoInks[0];
-function edgeLabel(){return cfg.brand || 'ВАШ БРЕНД';}
+function edgeLabel(){return cfg.brand || 'ЛОГОКАТ';}
 function makeStamp(logoClass, ink){
   const stamp = document.createElement('span');
   stamp.className = 'stamp-unit';
@@ -435,7 +435,7 @@ motionPreference.addEventListener('change', () => {
 positionDemo(demoPose, demoPhase);
 
 // Customizer with real controls, local image upload and SVG export.
-const cfg={brand:'ВАШ БРЕНД',ink:'#252923',surface:'kraft',density:2,position:50,logo:null,logoName:null,logoNote:null};
+const cfg={brand:'ЛОГОКАТ',ink:'#252923',surface:'kraft',density:2,position:50,logo:null,logoName:null,logoNote:null};
 let customizerUI;
 const densityNames={1:'Редкий',2:'Средний',3:'Частый'};
 const densityLabel=v=>{

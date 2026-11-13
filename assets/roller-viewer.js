@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { advancePose, takePoseControl, cameraFrame } from './roller-motion.js?v=60';
 import { bodyParts, prepareModel, createPartMaterial, lightStudio } from './roller-appearance.js?v=58';
-import { createPrintScene } from './roller-print-scene.js?v=84';
+import { createPrintScene } from './roller-print-scene.js?v=87';
 
 // The supplied assembly is in metres, Y-up. Keep its geometry and part placement.
 const modelURL = new URL('./models/roller.glb', import.meta.url);

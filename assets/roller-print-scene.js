@@ -176,7 +176,7 @@ export async function createPrintScene(view) {
     new THREE.MeshStandardMaterial({color:'#a5b0b3', roughness:.82}));
   index.position.set(0, radius / 10 * .82, .00815);
   wheel.add(index);
-  let design = {brand:'ВАШ БРЕНД', ink:'#262924', logo:null};
+  let design = {brand:'ЛОГОКАТ', ink:'#262924', logo:null};
   let paintedDesign;
   let designVersion = 0;
   async function setDesign(next) {
@@ -202,7 +202,7 @@ export async function createPrintScene(view) {
       inkCtx.fillRect(printStart, lineY, printEnd - printStart, lineThickness);
     }
     inkCtx.textAlign = 'center'; inkCtx.textBaseline = 'middle';
-    const label = image ? design.brand.trim() : design.brand || 'ВАШ БРЕНД';
+    const label = image ? design.brand.trim() : design.brand || 'ЛОГОКАТ';
     let fontSize = band * .8;
     inkCtx.font = `800 ${fontSize}px Arial, sans-serif`;
     fontSize *= Math.min(1, repeat * (image && label ? .48 : .83) / (inkCtx.measureText(label).width || 1));
