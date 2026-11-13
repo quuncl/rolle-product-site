@@ -13,6 +13,10 @@ fs.cpSync(path.join(root, 'assets/print'), path.join(dist, 'assets/print'), { re
 fs.cpSync(path.join(root, 'assets/vendor'), path.join(dist, 'assets/vendor'), { recursive: true });
 fs.cpSync(path.join(root, 'assets/models'), path.join(dist, 'assets/models'), { recursive: true });
 fs.copyFileSync(path.join(root, 'assets/roller-viewer.js'), path.join(dist, 'assets/roller-viewer.js'));
+fs.copyFileSync(path.join(root, 'assets/roller-motion.js'), path.join(dist, 'assets/roller-motion.js'));
+fs.copyFileSync(path.join(root, 'assets/roller-print-motion.js'), path.join(dist, 'assets/roller-print-motion.js'));
+fs.copyFileSync(path.join(root, 'assets/roller-print-scene.js'), path.join(dist, 'assets/roller-print-scene.js'));
+fs.copyFileSync(path.join(root, 'assets/roller-appearance.js'), path.join(dist, 'assets/roller-appearance.js'));
 fs.copyFileSync(path.join(root, 'assets/preview-offer.js'), path.join(dist, 'assets/preview-offer.js'));
 fs.copyFileSync(path.join(root, 'assets/customizer-interactions.js'), path.join(dist, 'assets/customizer-interactions.js'));
 fs.copyFileSync(path.join(root, 'assets/request-validation.js'), path.join(dist, 'assets/request-validation.js'));

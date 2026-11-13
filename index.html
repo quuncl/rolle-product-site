@@ -9,7 +9,16 @@
   <meta property="og:description" content="Интерактивная 3D-презентация роллера для брендирования упаковки." />
   <title>ROLLÉ — оставьте свой след.</title>
   <link rel="icon" type="image/svg+xml" href="./assets/images/rolle-mark.svg" />
-  <link rel="stylesheet" href="./assets/styles.css?v=56" />
+  <link rel="stylesheet" href="./assets/styles.css?v=75" />
+  <noscript><style>
+    [data-roller-viewer] > img:first-of-type{visibility:visible;opacity:1!important}
+    .roller-model-status{display:none!important}
+    #craftBoard > .mailer,#craftBoard > .demo-roller{visibility:visible!important}
+  </style></noscript>
+  <link rel="preload" href="./assets/models/roller.glb" as="fetch" crossorigin="anonymous" />
+  <link rel="preload" as="image" href="./assets/images/demo-kraft-box-960.webp"
+    imagesrcset="./assets/images/demo-kraft-box-480.webp 480w, ./assets/images/demo-kraft-box-960.webp 960w, ./assets/images/demo-kraft-box-1440.webp 1440w"
+    imagesizes="(min-width:1240px) 1012px, 84vw" fetchpriority="high" />
   <script type="importmap">
   {
     "imports": {
@@ -18,9 +27,9 @@
     }
   }
   </script>
-  <script type="module" src="./assets/app.js?v=56"></script>
+  <script type="module" src="./assets/app.js?v=75"></script>
   <script defer src="./assets/preview-offer.js?v=47"></script>
-  <script type="module" src="./assets/roller-viewer.js?v=44"></script>
+  <script type="module" src="./assets/roller-viewer.js?v=67"></script>
 </head>
 <body>
   <div id="scroll-progress" class="scroll-progress" aria-hidden="true"></div>
@@ -34,76 +43,52 @@
   <nav class="mobile-menu" id="mobileMenu" aria-label="Мобильная навигация"><a href="#product">Продукт</a><a href="#demo">Как работает</a><a href="#customizer">Конструктор</a><a href="#details">Результат</a></nav>
 
   <main>
-    <div class="hero-story" id="hero">
-    <section class="hero section-pad">
-      <div class="hero-copy">
-        <h1>Ваш логотип<br>на упаковке.</h1>
-        <p class="hero-lead">Ручной роллер для печати на коробках и&nbsp;бумажных пакетах.</p>
-        <div class="hero-ctas">
-          <a href="#demo" class="btn btn-accent hero-primary-cta">Посмотреть, как работает <span aria-hidden="true">↓</span></a>
+    <div id="hero">
+      <section class="hero section-pad" id="demo" aria-labelledby="heroTitle">
+        <div class="hero-copy">
+          <h1 id="heroTitle">Ваш логотип<br>на упаковке.</h1>
+          <p class="hero-lead">Ручной роллер для печати на коробках и&nbsp;бумажных пакетах.</p>
+          <div class="hero-ctas">
+            <a href="#customizer" class="btn btn-accent hero-primary-cta">Примерить свой логотип <span aria-hidden="true">↘</span></a>
+          </div>
+        </div>
+        <div class="demo-workspace">
+          <div class="craft-board" id="craftBoard" data-roller-viewer="demo" data-model-ready="loading" role="img" aria-label="3D-визуализация печати роллером на крышке и боковой грани картонной коробки">
+            <div class="roller-model-status" role="status">Загрузка 3D-сцены…</div>
+            <div class="mailer" aria-hidden="true">
+              <img class="mailer-photo" id="demoBoxPhoto" src="./assets/images/demo-kraft-box-960.webp"
+                srcset="./assets/images/demo-kraft-box-480.webp 480w, ./assets/images/demo-kraft-box-960.webp 960w, ./assets/images/demo-kraft-box-1440.webp 1440w"
+                sizes="(min-width:1240px) 1012px, 84vw" width="1903" height="826" alt="" loading="eager" decoding="async" />
+            </div>
+            <div class="print-path" id="printPath"><div class="print-content" id="printContent"></div></div>
+            <div class="demo-roller" id="demoRoller" aria-hidden="true">
+              <img class="demo-product" src="./assets/images/roller-smooth-side.webp" width="941" height="1672" alt="" loading="lazy" decoding="async" />
+            </div>
+          </div>
+          <button type="button" class="demo-playback" id="runDemo" aria-controls="craftBoard" disabled>
+            <span>Запустить показ</span>
+          </button>
+          <a class="demo-invitation" id="demoInvitation" href="#customizer" aria-label="Хотите так же? Открыть конструктор" hidden>
+            <strong>Хотите так же?</strong>
+          </a>
+        </div>
+        <p class="visually-hidden" id="demoStatus" role="status">Загружаем демонстрацию печати…</p>
+        <p class="demo-disclaimer">3D-концепт принципа печати. Фактический оттиск потребует проверки на реальной упаковке.</p>
+      </section>
+    </div>
+
+    <section class="manifesto section-pad" id="product">
+      <div class="section-index">О ПРОДУКТЕ</div>
+      <div class="manifesto-grid">
+        <h2 class="display-heading">Один проход.<br>Целая линия оттиска.</h2>
+        <div class="manifesto-copy">
+          <p>Прокатите роллер вдоль края коробки или поперёк бумажного пакета. Ваш рисунок повторится по всей длине прохода.</p>
+          <a class="section-link" href="#engineering">Рассмотреть роллер в 3D <span aria-hidden="true">↓</span></a>
         </div>
       </div>
-      <div class="hero-visual hero-photo-stage" data-roller-viewer="hero">
-        <img class="hero-product-photo" id="heroProductPhoto" src="./assets/images/roller-smooth-side.webp"
-          width="941" height="1672" alt="Прототип роллера ROLLÉ, вид сбоку" fetchpriority="high" decoding="async" />
-        <img class="hero-product-photo hero-product-photo-front" id="heroProductPhotoFront"
-          src="./assets/images/roller-smooth-front.webp" width="941" height="1672"
-          alt="" aria-hidden="true" decoding="async" />
-        <svg class="hero-wheel hero-wheel-side" viewBox="0 0 941 1672" aria-hidden="true">
-          <defs>
-            <clipPath id="heroWheelRim">
-              <path d="M208 345C186 243 233 111 312 61C417 -9 552 5 648 80C735 148 770 260 720 371C689 438 642 478 593 499L586 452C628 412 646 348 638 273C625 164 557 100 465 89C350 74 254 159 252 282C250 329 261 379 277 407L275 455C241 433 220 391 208 345Z" />
-            </clipPath>
-            <radialGradient id="heroRimFade" gradientUnits="userSpaceOnUse" cx="470" cy="268" r="281">
-              <stop offset=".69" stop-color="white" stop-opacity="0" />
-              <stop offset=".85" stop-color="white" />
-              <stop offset="1" stop-color="white" />
-            </radialGradient>
-            <mask id="heroRimMask" maskUnits="userSpaceOnUse" x="190" y="0" width="570" height="520">
-              <rect x="190" width="570" height="520" fill="url(#heroRimFade)" />
-            </mask>
-          </defs>
-          <g clip-path="url(#heroWheelRim)" mask="url(#heroRimMask)">
-            <image class="hero-wheel-disc" href="./assets/images/roller-print-wheel.png" x="176" y="-23" width="588" height="582" />
-          </g>
-        </svg>
-        <svg class="hero-wheel hero-wheel-front" viewBox="0 0 941 1672" aria-hidden="true">
-          <defs>
-            <image id="heroTreadTexture" href="./assets/images/roller-smooth-front.webp"
-              x="-320" y="-130" width="941" height="1672" />
-            <linearGradient id="heroTreadTileFade" x2="0" y2="1">
-              <stop stop-color="white" stop-opacity="0" />
-              <stop offset=".23" stop-color="white" />
-              <stop offset=".77" stop-color="white" />
-              <stop offset="1" stop-color="white" stop-opacity="0" />
-            </linearGradient>
-            <mask id="heroTreadTileMask" maskUnits="userSpaceOnUse" x="0" y="0" width="294" height="470">
-              <rect width="294" height="470" fill="url(#heroTreadTileFade)" />
-            </mask>
-            <pattern id="heroWheelTreadBase" x="320" y="-105" width="294" height="470" patternUnits="userSpaceOnUse">
-              <use href="#heroTreadTexture" />
-              <animateTransform attributeName="patternTransform" type="translate" from="0 0" to="0 470" dur="3.8s" repeatCount="indefinite" />
-            </pattern>
-            <pattern id="heroWheelTread" x="320" y="130" width="294" height="470" patternUnits="userSpaceOnUse">
-              <use href="#heroTreadTexture" mask="url(#heroTreadTileMask)" />
-              <animateTransform attributeName="patternTransform" type="translate" from="0 0" to="0 470" dur="3.8s" repeatCount="indefinite" />
-            </pattern>
-            <linearGradient id="heroTreadFade" x2="0" y2="1">
-              <stop stop-color="white" stop-opacity="0" />
-              <stop offset=".18" stop-color="white" />
-              <stop offset=".76" stop-color="white" />
-              <stop offset="1" stop-color="white" stop-opacity="0" />
-            </linearGradient>
-            <mask id="heroTreadMask" maskUnits="userSpaceOnUse" x="320" y="100" width="294" height="530">
-              <rect x="320" y="100" width="294" height="530" rx="20" fill="url(#heroTreadFade)" />
-            </mask>
-          </defs>
-          <g mask="url(#heroTreadMask)">
-            <rect x="320" y="100" width="294" height="530" fill="url(#heroWheelTreadBase)" />
-            <rect x="320" y="100" width="294" height="530" fill="url(#heroWheelTread)" />
-          </g>
-        </svg>
-      </div>
+    </section>
+
+    <section class="engineering section-pad" id="engineering">
       <svg class="roller-color-filter" width="0" height="0" aria-hidden="true">
         <defs>
           <filter id="rollerBodyColor" color-interpolation-filters="sRGB">
@@ -115,30 +100,12 @@
           </filter>
         </defs>
       </svg>
-      <div class="hero-actions">
-        <p class="hero-caption">3D-концепт</p>
-      </div>
-      <div class="hero-story-progress" aria-hidden="true"></div>
-    </section>
-    </div>
-
-    <section class="manifesto section-pad" id="product">
-      <div class="section-index">О ПРОДУКТЕ</div>
-      <div class="manifesto-grid">
-        <h2 class="display-heading">Один проход.<br>Целая линия оттиска.</h2>
-        <div class="manifesto-copy">
-          <p>Прокатите роллер вдоль края коробки или поперёк бумажного пакета. Ваш рисунок повторится по всей длине прохода.</p>
-          <a class="section-link" href="#demo">Посмотреть демонстрацию <span aria-hidden="true">↘</span></a>
-        </div>
-      </div>
-    </section>
-
-    <section class="engineering section-pad" id="engineering">
       <div class="engineering-copy">
         <h2 class="display-heading">Устройство роллера</h2>
         <p>Маркер подаёт краску на рельефное клише. При прокатке клише переносит рисунок на упаковку.</p>
       </div>
-      <div class="engineering-scene engineering-photo-stage" data-roller-viewer="engineering">
+      <div class="engineering-scene engineering-photo-stage" data-roller-viewer="engineering" data-model-ready="loading">
+        <div class="roller-model-status" role="status">Загрузка 3D-модели…</div>
         <img class="engineering-product-photo" id="engineeringPhoto" src="./assets/images/roller-smooth-side.webp"
           width="941" height="1672" alt="Синий прототип роллера, вид сбоку" loading="lazy" decoding="async" />
         <img class="engineering-product-photo engineering-product-photo-front" id="engineeringPhotoFront"
@@ -204,41 +171,6 @@
       -->
     </section>
 
-    <section class="how section-pad" id="demo">
-      <div class="section-index">Печать на упаковке</div>
-      <div class="how-head"><h2 class="display-heading">Проведите.<br>Посмотрите на результат.</h2><p>Роллер идёт вдоль края коробки. Повторяющийся оттиск показывает принцип печати, а не результат испытаний.</p></div>
-      <div class="demo-workspace">
-        
-        <div class="craft-board" id="craftBoard">
-          <div class="mailer" aria-hidden="true">
-            <img class="mailer-photo" id="demoBoxPhoto" src="./assets/images/demo-kraft-box-realistic.webp"
-              width="1903" height="826" alt="" loading="lazy" decoding="async" />
-          </div>
-          <div class="print-path" id="printPath"><div class="print-content" id="printContent"></div></div>
-          <div class="demo-roller" id="demoRoller" aria-hidden="true">
-            <img class="demo-wheel-spin" src="./assets/images/roller-print-wheel.png" width="1254" height="1254" alt="" decoding="async" />
-            <svg class="demo-product" viewBox="0 0 941 1672" aria-hidden="true">
-              <defs>
-                <mask id="demoHousingMask" maskUnits="userSpaceOnUse" x="0" y="0" width="941" height="1672">
-                  <rect width="941" height="1672" fill="white" />
-                  <ellipse cx="470" cy="267" rx="276" ry="256" fill="black" />
-                  <ellipse cx="444" cy="280" rx="191" ry="190" fill="white" />
-                  <path d="M270 565 275 321C264 230 304 165 379 150 462 129 535 183 558 266L587 576Z" fill="white" />
-                  <path d="M620 440 660 451 671 580 617 583Z" fill="white" />
-                  <rect y="558" width="941" height="1114" fill="white" />
-                </mask>
-              </defs>
-              <image href="./assets/images/roller-smooth-side.webp" width="941" height="1672" mask="url(#demoHousingMask)" />
-            </svg>
-          </div>
-          
-        </div>
-        <div class="demo-controls"><div class="color-control"><span class="control-label">ЦВЕТ ОТПЕЧАТКА</span><div class="swatches" id="demoSwatches"><button class="swatch active" data-ink="#262924" style="--swatch:#262924" aria-label="Чёрный" title="Чёрный"></button><button class="swatch" data-ink="#ce503f" style="--swatch:#ce503f" aria-label="Красный" title="Красный"></button><button class="swatch" data-ink="#346a9f" style="--swatch:#346a9f" aria-label="Синий" title="Синий"></button><button class="swatch light-swatch" data-ink="#f8f6e9" style="--swatch:#f8f6e9" aria-label="Белый" title="Белый"></button><button class="swatch" data-ink="#b68d3a" style="--swatch:#b68d3a" aria-label="Золотой" title="Золотой"></button></div></div><button class="btn btn-dark" id="runDemo">Прокатить роллер <span>↗</span></button></div>
-      </div>
-      <p class="demo-status" id="demoStatus" role="status">Нажмите «Прокатить роллер», чтобы начать.</p>
-      <p class="demo-disclaimer">Это визуализация контакта колеса с краем коробки. Чёткость, цвет и поведение краски на настоящей упаковке здесь не показаны.</p>
-    </section>
-
     <section class="features section-pad" id="benefits">
       <div class="section-index light">Ваш рисунок. Ваша упаковка.</div>
       <div class="feature-intro"><h2 class="display-heading">Три составляющие оттиска</h2></div>
@@ -260,8 +192,8 @@
 
     <section class="builder section-pad" id="customizer">
       <div class="builder-title">
-        <h2 class="display-heading">Теперь — с вашим именем.</h2>
-        <p>Добавьте свой знак, передвиньте оттиск и посмотрите, как он ложится на упаковку.</p>
+        <h2 class="display-heading">Поставьте свой знак.</h2>
+        <p>Введите название или загрузите логотип. Затем возьмите роллер и проведите по коробке.</p>
       </div>
       <div class="builder-shell">
         <div class="builder-preview">
@@ -275,12 +207,12 @@
                 width="1448" height="1086" alt="" aria-hidden="true" loading="lazy" decoding="async" />
               <div class="preview-print-surface" id="previewPrintSurface">
                 <div class="preview-band" id="previewBand" role="slider" tabindex="0" aria-label="Положение оттиска на упаковке" aria-orientation="vertical" aria-valuemin="15" aria-valuemax="85" aria-valuenow="50" aria-valuetext="По центру, 50%" aria-describedby="previewDragHint"><div class="preview-repeat" id="previewRepeat"></div></div>
-                <span class="preview-print-cursor" id="previewPrintCursor" aria-hidden="true" hidden></span>
+                <button type="button" class="preview-print-cursor" id="previewPrintCursor" role="slider" aria-label="Прокатка роллера" aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-describedby="previewDragHint"><img src="./assets/images/roller-smooth-side.webp" width="941" height="1672" alt="" draggable="false" loading="lazy" /></button>
               </div>
             </div>
           </div>
           <div class="preview-interaction-bar">
-            <p id="previewDragHint">↕ Передвиньте оттиск мышью, касанием или стрелками.</p>
+            <p id="previewDragHint">Тяните роллер вправо для печати. Оттиск можно двигать вверх и вниз.</p>
             <button type="button" class="preview-center" id="previewCenter">По центру</button>
           </div>
           <p class="preview-live-status" id="previewLiveStatus" role="status">Настройте оттиск и нажмите «Прокатить».</p>
@@ -294,15 +226,9 @@
           <label for="brandInput" class="field-label">Название бренда</label>
           <input id="brandInput" class="brand-input" value="ВАШ БРЕНД" maxlength="22" spellcheck="false" aria-describedby="brandHelp" />
           <small id="brandHelp">До 22 символов</small>
-          <div class="brand-examples" role="group" aria-label="Попробовать пример надписи">
-            <span>Попробуйте:</span>
-            <button type="button" data-brand-example="FORMA" aria-pressed="false">FORMA</button>
-            <button type="button" data-brand-example="СДЕЛАНО ВРУЧНУЮ" aria-pressed="false">Сделано вручную</button>
-            <button type="button" data-brand-example="С ЛЮБОВЬЮ" aria-pressed="false">С любовью</button>
-          </div>
           <label for="logoUpload" class="file-input-label">Загрузить логотип <span>PNG, JPG, SVG</span><input type="file" id="logoUpload" accept="image/png,image/jpeg,image/svg+xml" /></label>
           <button type="button" class="reset-logo" id="resetLogo" hidden>Убрать логотип</button>
-          <p class="logo-check" id="logoCheck" role="status">После загрузки покажем, влезает ли знак в полосу и нет ли слишком тонких линий.</p>
+          <p class="logo-check" id="logoCheck" role="status" hidden></p>
 
           <div class="field-label" id="inkLabel">Цвет печати</div>
           <div class="builder-colors" id="builderSwatches" role="group" aria-labelledby="inkLabel">

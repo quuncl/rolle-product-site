@@ -1,4 +1,5 @@
 import { createRequestValidation } from './request-validation.js?v=53';
+import { printFrameAt, PRINT_TIMING } from './roller-print-motion.js?v=66';
 
 /* ROLLÉ — product photography, scroll presentation and local customizer. */
 (() => {
@@ -82,32 +83,25 @@ $$('.faq details').forEach(details => {
 });
 
 // Two photographed views blend as the visitor scrolls through the product.
-function showPhotoViews(sidePhoto, frontPhoto, progress, dimOverlap = false){
+function showPhotoViews(sidePhoto, frontPhoto, progress){
   const motion = reducedMotion ? 0 : progress;
-  const blendWidth = dimOverlap ? .32 : .4;
-  const blend = clamp(.5 + (motion - .5) / blendWidth, 0, 1);
+  const blend = clamp(.5 + (motion - .5) / .4, 0, 1);
   const frontOpacity = frontPhoto.complete && frontPhoto.naturalWidth
     ? blend * blend * (3 - 2 * blend)
     : 0;
   const transform = `translateY(${-8 * motion}px) rotate(${-9 + 18 * motion}deg) scale(${1 + .06 * motion})`;
   sidePhoto.style.transform = transform;
   frontPhoto.style.transform = transform;
-  const sideOpacity = 1 - frontOpacity;
-  sidePhoto.style.opacity = dimOverlap ? sideOpacity ** 2.25 : sideOpacity;
-  frontPhoto.style.opacity = dimOverlap ? frontOpacity ** 2.25 : frontOpacity;
+  sidePhoto.style.opacity = 1 - frontOpacity;
+  frontPhoto.style.opacity = frontOpacity;
   sidePhoto.alt = frontOpacity > .5
     ? 'Прототип роллера ROLLÉ, вид спереди'
     : 'Прототип роллера ROLLÉ, вид сбоку';
 }
 
-const heroPhoto = $('#heroProductPhoto');
-if (heroPhoto){
-  const frontPhoto = $('#heroProductPhotoFront');
-  const story = $('#hero');
-  const stage = $('.hero', story);
-  const photoStage = $('.hero-photo-stage', stage);
-  const engineeringStage = $('.engineering-photo-stage');
-  const photoStages = [photoStage, engineeringStage];
+const engineering = $('#engineering');
+if (engineering){
+  const engineeringStage = $('.engineering-photo-stage', engineering);
   const colorMatrix = $('#rollerBodyTint');
   // Each channel maps the source luminance to a preview color, retaining surface detail.
   const bodyColors = {
@@ -124,14 +118,14 @@ if (heroPhoto){
     const color = selected.value;
     colorName.value = selected.getAttribute('aria-label');
     if (color === 'blue'){
-      photoStages.forEach(preview => preview.style.removeProperty('--body-color-filter'));
+      engineeringStage.style.removeProperty('--body-color-filter');
       return;
     }
     const channels = bodyColors[color].map(([scale, offset]) =>
       `${.2126 * scale} ${.7152 * scale} ${.0722 * scale} 0 ${offset}`
     );
     colorMatrix.setAttribute('values', channels.join(' ') + ' 0 0 0 1 0');
-    photoStages.forEach(preview => preview.style.setProperty('--body-color-filter', 'url(#rollerBodyColor)'));
+    engineeringStage.style.setProperty('--body-color-filter', 'url(#rollerBodyColor)');
   }
   colorOptions.addEventListener('change', updateBodyColor);
   function updatePreviewBackground(){
@@ -144,24 +138,12 @@ if (heroPhoto){
   }
   window.addEventListener('pageshow', restorePreview);
   restorePreview();
-  const engineering = $('#engineering');
   const sections = $$('main > section');
   const engineeringPhoto = $('#engineeringPhoto');
   const engineeringFront = $('#engineeringPhotoFront');
   let frame = 0;
   function updateShot(){
     frame = 0;
-    const storyBounds = story.getBoundingClientRect();
-    const stageBounds = stage.getBoundingClientRect();
-    const travel = storyBounds.height - stageBounds.height;
-    const progress = travel > 0
-      ? clamp((stageBounds.top - storyBounds.top) / travel, 0, 1)
-      : 0;
-    stage.style.setProperty('--shot-progress', progress);
-    showPhotoViews(heroPhoto, frontPhoto, progress, true);
-    photoStage.style.setProperty('--hero-wheel-pose', heroPhoto.style.transform);
-    photoStage.style.setProperty('--hero-wheel-side-opacity', heroPhoto.style.opacity);
-    photoStage.style.setProperty('--hero-wheel-front-opacity', frontPhoto.style.opacity);
     const sectionTops = sections.map(section => section.getBoundingClientRect().top);
     sections.forEach((section, index) => {
       const handoff = reducedMotion ? 0 : clamp(
@@ -171,7 +153,6 @@ if (heroPhoto){
       const reveal = reducedMotion ? 1 : clamp((handoff - .04) / .42, 0, 1);
       section.style.setProperty('--handoff', easedHandoff);
       section.style.setProperty('--paper-reveal', reveal * reveal * (3 - 2 * reveal));
-      if (index === 0) story.style.setProperty('--handoff', easedHandoff);
     });
     const engineeringBounds = engineering.getBoundingClientRect();
     const engineeringProgress = clamp(
@@ -182,23 +163,18 @@ if (heroPhoto){
   function queueShot(){
     if (!frame) frame = requestAnimationFrame(updateShot);
   }
-  function measureStage(){
-    story.style.setProperty('--hero-height', stage.offsetHeight + 'px');
-    queueShot();
-  }
-  frontPhoto.addEventListener('load', queueShot);
   engineeringFront.addEventListener('load', queueShot);
-  story.classList.add('is-animated');
   sections.forEach(section => section.classList.add('section-handoff'));
   window.addEventListener('scroll', queueShot, {passive: true});
-  window.addEventListener('resize', measureStage);
+  window.addEventListener('resize', queueShot);
   motionPreference.addEventListener('change', queueShot);
-  if ('ResizeObserver' in window) new ResizeObserver(measureStage).observe(stage);
-  measureStage();
+  queueShot();
 }
 
 // Actual interactive print demo (a stylized motion simulation).
-const demoPath=$('#printPath'), demoRoller=$('#demoRoller'), demoText=$('#printContent');let demoInk='#262924';
+const demoPath = $('#printPath'), demoRoller = $('#demoRoller'), demoText = $('#printContent');
+const demoInks = ['#262924', '#ce503f', '#346a9f'];
+let demoInk = demoInks[0];
 function edgeLabel(){return cfg.brand || 'ВАШ БРЕНД';}
 function fillEdge(container, available, split){
   container.replaceChildren();
@@ -253,69 +229,201 @@ function paintEdges(){
   }
   demoPath.style.setProperty('--paint', demoInk);
   demoPath.style.mixBlendMode = demoInk.toLowerCase() === '#f8f6e9' ? 'normal' : 'multiply';
+  emitDemoDesign();
 }
 const demoBoard = $('#craftBoard');
 const demoBoxPhoto = $('#demoBoxPhoto');
+const runDemo = $('#runDemo');
+const demoPlaybackLabel = $('span', runDemo);
+const demoStatus = $('#demoStatus');
+const demoInvitation = $('#demoInvitation');
+const demoResultHold = 1400;
+let demoAutoplayPending = true;
+let demoStartTimer = 0;
+let demoVisibility = 0;
+let upcomingInks = [];
 let demoFrame = 0;
-let demoProgress = 0;
+let demoPose = printFrameAt(0);
+let demoPhase = 'loading';
+let demoElapsed = 0;
+let demoRunning = false;
+let demoLastNow;
+const demoPhases = {
+  loading:'Загружаем демонстрацию печати…',
+  ready:'Показ начнётся при появлении коробки на экране.',
+  press:'Колесо опускается на крышку коробки.',
+  roll:'Роллер печатает на крышке.',
+  'top-lift':'Оттиск на крышке готов.',
+  transfer:'Роллер переходит на боковую грань.',
+  'front-press':'Колесо прижимается к боковой грани.',
+  'front-roll':'Роллер печатает на боковой грани.',
+  'front-lift':'Оттиск на боковой грани готов.',
+  pause:'Показ приостановлен.',
+  finish:'Оттиск готов.',
+};
 
-function positionDemo(progress){
-  demoProgress = progress;
-  // The photograph stays proportional. Locate its front edge after responsive sizing.
-  const photoBounds = demoBoxPhoto.getBoundingClientRect();
-  const boardBounds = demoBoard.getBoundingClientRect();
-  const contact = photoBounds.top - boardBounds.top + photoBounds.height * .275;
-  demoBoard.style.setProperty('--contact', contact + 'px');
-  const distance = demoPath.clientWidth * progress;
-  demoRoller.style.left = (demoPath.offsetLeft + distance) + 'px';
-  demoRoller.style.top = (contact + demoPath.offsetHeight / 2 - demoRoller.offsetHeight * .32) + 'px';
-  demoPath.style.clipPath = `inset(0 ${(1 - progress) * 100}% 0 0)`;
-  // No-slip rolling: the angle is the distance travelled divided by wheel radius.
-  const radius = demoRoller.offsetHeight * .15;
-  demoRoller.style.setProperty('--wheel-angle', `${distance / radius}rad`);
+function emitDemoDesign(){
+  demoBoard.dispatchEvent(new CustomEvent('roller-demo-design', {detail:{brand:cfg.brand, ink:demoInk, logo:cfg.logo}}));
 }
+demoBoard.addEventListener('roller-demo-request-design', emitDemoDesign);
+
+function positionDemo(pose, phase = pose.phase){
+  demoPose = pose;
+  demoPhase = phase;
+  const {progress, frontProgress, lift, turn} = pose;
+  if (demoBoard.dataset.modelReady !== 'true') {
+    // Locate the front edge of the fallback photograph after responsive sizing.
+    const photoBounds = demoBoxPhoto.getBoundingClientRect();
+    const boardBounds = demoBoard.getBoundingClientRect();
+    const contact = photoBounds.top - boardBounds.top + photoBounds.height * .275;
+    demoBoard.style.setProperty('--contact', contact + 'px');
+    const distance = demoPath.clientWidth * progress;
+    const contactX = demoRoller.offsetWidth / 2;
+    const contactY = demoRoller.offsetHeight * .97;
+    demoRoller.style.left = (demoPath.offsetLeft + distance - contactX) + 'px';
+    demoRoller.style.top = (contact + demoPath.offsetHeight / 2 - contactY) + 'px';
+    demoPath.style.clipPath = `inset(0 ${(1 - progress) * 100}% 0 0)`;
+  }
+  demoBoard.dataset.printProgress = String(progress);
+  demoBoard.dataset.frontPrintProgress = String(frontProgress);
+  demoBoard.dataset.printLift = String(lift);
+  demoBoard.dataset.printTurn = String(turn);
+  demoBoard.dataset.demoPhase = phase;
+  demoBoard.dispatchEvent(new CustomEvent('roller-demo-state', {detail:pose}));
+  const message = demoPhases[phase];
+  if (demoStatus.textContent !== message) demoStatus.textContent = message;
+}
+
+demoBoard.addEventListener('roller-demo-ready', () => {
+  runDemo.disabled = reducedMotion;
+  if (reducedMotion) finishDemo();
+  else if (demoPhase === 'loading') positionDemo(demoPose, 'ready');
+  else if (demoBoard.dataset.modelReady === 'false') positionDemo(demoPose, demoPhase);
+  syncDemoPlayback();
+});
 
 function finishDemo(){
-  demoFrame = 0;
-  positionDemo(1);
+  suspendDemo();
+  demoAutoplayPending = false;
+  upcomingInks = [];
+  demoRunning = false;
+  demoElapsed = PRINT_TIMING.total;
+  positionDemo(printFrameAt(demoElapsed));
   demoPath.classList.add('printed');
-  $('#runDemo').textContent = 'Повторить печать ↗';
-  $('#demoStatus').textContent = 'Прокат завершён. Повторы легли вдоль края коробки.';
+  demoPlaybackLabel.textContent = 'Повторить показ';
+  // Only the completed sequence reveals the invitation, after every ink variant.
+  demoInvitation.hidden = false;
 }
 
-$('#runDemo').addEventListener('click', () => {
-  cancelAnimationFrame(demoFrame);
-  demoPath.classList.remove('printed');
-  $('#runDemo').textContent = 'Начать заново ↗';
-  $('#demoStatus').textContent = 'Роллер наносит рисунок.';
-  positionDemo(0);
-  if (reducedMotion){
-    finishDemo();
-    return;
+function rollDemo(now){
+  demoFrame = 0;
+  if (!demoRunning) return;
+  const previousElapsed = demoElapsed;
+  const duration = demoBoard.dataset.modelReady === 'false' ? PRINT_TIMING.pass : PRINT_TIMING.total;
+  const end = duration + (upcomingInks.length ? demoResultHold : 0);
+  if (demoLastNow != null) demoElapsed = Math.min(end, demoElapsed + Math.min(now - demoLastNow, 80));
+  demoLastNow = now;
+  if (previousElapsed < duration || demoPhase !== 'finish') {
+    const state = printFrameAt(Math.min(demoElapsed, duration));
+    positionDemo(state, demoElapsed >= duration ? 'finish' : state.phase);
   }
-  let started;
-  function roll(now){
-    started ??= now;
-    const progress = clamp((now - started) / 3400, 0, 1);
-    positionDemo(progress);
-    if (progress < 1){
-      demoFrame = requestAnimationFrame(roll);
-    } else {
+  if (demoElapsed >= end) {
+    const nextInk = upcomingInks.shift();
+    if (!nextInk) {
       finishDemo();
+      return;
     }
+    demoElapsed = 0;
+    positionDemo(printFrameAt(0));
+    demoInk = nextInk;
+    paintEdges();
   }
-  demoFrame = requestAnimationFrame(roll);
+  demoFrame = requestAnimationFrame(rollDemo);
+}
+
+function suspendDemo(){
+  cancelAnimationFrame(demoFrame);
+  demoFrame = 0;
+  demoLastNow = null;
+}
+
+function syncDemoPlayback(){
+  const visible = !document.hidden && demoVisibility >= .01 && !document.querySelector('dialog[open]');
+  if (!visible) suspendDemo();
+  else if (demoRunning && !demoFrame) demoFrame = requestAnimationFrame(rollDemo);
+
+  if (!visible || !demoAutoplayPending || runDemo.disabled || reducedMotion || demoVisibility < .4) {
+    clearTimeout(demoStartTimer);
+    demoStartTimer = 0;
+  } else if (!demoStartTimer) {
+    // Let a fast scroll past the scene finish without consuming the first play.
+    demoStartTimer = setTimeout(() => {
+      demoStartTimer = 0;
+      startDemo();
+    }, 250);
+  }
+}
+
+function startDemo(){
+  demoAutoplayPending = false;
+  demoInvitation.hidden = true;
+  if (demoPhase !== 'pause') {
+    demoElapsed = 0;
+    upcomingInks = demoInks.slice(1);
+    demoInk = demoInks[0];
+    positionDemo(printFrameAt(0));
+    paintEdges();
+  }
+  demoPath.classList.remove('printed');
+  demoRunning = true;
+  demoLastNow = null;
+  demoPlaybackLabel.textContent = 'Приостановить показ';
+  syncDemoPlayback();
+}
+
+runDemo.addEventListener('click', () => {
+  if (demoRunning) {
+    suspendDemo();
+    demoRunning = false;
+    positionDemo(demoPose, 'pause');
+    demoPlaybackLabel.textContent = 'Продолжить показ';
+  } else startDemo();
 });
-window.addEventListener('resize', () => {positionDemo(demoProgress); paintEdges();});
-demoBoxPhoto.addEventListener('load', () => {positionDemo(demoProgress); paintEdges();});
+
+if ('IntersectionObserver' in window) {
+  const observer = new IntersectionObserver(([entry]) => {
+    demoVisibility = entry.intersectionRatio;
+    syncDemoPlayback();
+  }, {threshold:[0, .01, .4]});
+  observer.observe(demoBoard);
+} else {
+  function measureDemoVisibility(){
+    const {top, bottom, height} = demoBoard.getBoundingClientRect();
+    demoVisibility = height ? Math.max(0, Math.min(innerHeight, bottom) - Math.max(0, top)) / height : 0;
+    syncDemoPlayback();
+  }
+  window.addEventListener('scroll', measureDemoVisibility, {passive:true});
+  window.addEventListener('resize', measureDemoVisibility);
+  measureDemoVisibility();
+}
+document.addEventListener('visibilitychange', syncDemoPlayback);
+const demoDialogObserver = new MutationObserver(syncDemoPlayback);
+$$('dialog').forEach(dialog => demoDialogObserver.observe(dialog, {attributes:true, attributeFilter:['open']}));
+window.addEventListener('resize', () => {positionDemo(demoPose, demoPhase); paintEdges();});
+async function markDemoBoxLoaded(){
+  try { await demoBoxPhoto.decode(); } catch { /* Keep the embedded preview as a fallback. */ }
+  if (demoBoxPhoto.naturalWidth) demoBoxPhoto.parentElement.classList.add('is-loaded');
+  positionDemo(demoPose, demoPhase);
+  paintEdges();
+}
+demoBoxPhoto.addEventListener('load', markDemoBoxLoaded);
 motionPreference.addEventListener('change', () => {
-  if (reducedMotion && demoFrame){
-    cancelAnimationFrame(demoFrame);
-    finishDemo();
-  }
+  if (demoPhase === 'loading') return;
+  runDemo.disabled = reducedMotion;
+  if (reducedMotion) finishDemo();
+  syncDemoPlayback();
 });
-positionDemo(0);
-$$('#demoSwatches .swatch').forEach(s=>s.addEventListener('click',()=>{demoInk=s.dataset.ink;$$('#demoSwatches .swatch').forEach(t=>t.classList.toggle('active',t===s));paintEdges();}));
+positionDemo(demoPose, demoPhase);
 
 // Customizer with real controls, local image upload and SVG export.
 const cfg={brand:'ВАШ БРЕНД',ink:'#252923',surface:'kraft',density:2,position:50,logo:null,logoName:null,logoNote:null};
@@ -332,11 +440,12 @@ const densityGap=(v,rare,mid,dense)=>{
   if(n<=2) return rare+(mid-rare)*(n-1);
   return mid+(dense-mid)*(n-2);
 };
-const logoIdle='После загрузки покажем, влезает ли знак в полосу и нет ли слишком тонких линий.';
+const logoIdle='';
 function setLogoCheck(message, state){
   const note=$('#logoCheck');
   if(!note) return;
   note.textContent=message;
+  note.hidden=!message;
   note.classList.toggle('is-warn', state==='warn');
   note.classList.toggle('is-ok', state==='ok');
 }
@@ -507,15 +616,10 @@ $('#logoUpload').addEventListener('change',e=>{const f=e.target.files?.[0];if(!f
 $('#resetLogo').addEventListener('click',()=>{cfg.logo=null;cfg.logoName=null;cfg.logoNote=null;$('#logoUpload').value='';$('#resetLogo').hidden=true;setLogoCheck(logoIdle,'');renderConfig();});
 setLogoCheck(logoIdle,'');
 renderConfig();
-import('./customizer-interactions.js?v=55').then(({initCustomizerInteractions}) => {
+if (demoBoxPhoto.complete) markDemoBoxLoaded();
+import('./customizer-interactions.js?v=75').then(({initCustomizerInteractions}) => {
   customizerUI = initCustomizerInteractions({
     config: cfg,
-    onPreset(text){
-      if(cfg.logo) $('#resetLogo').click();
-      cfg.brand = text;
-      $('#brandInput').value = text;
-      renderConfig();
-    },
     onPositionChange(position){ cfg.position = position; $('#comparePrint').style.top = position + '%'; },
   });
 }).catch(error => console.warn('Дополнительные жесты предпросмотра недоступны.', error));
