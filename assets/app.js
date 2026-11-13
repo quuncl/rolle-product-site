@@ -630,6 +630,8 @@ if ('ResizeObserver' in window){
   }).observe($('#previewBand'));
 }
 
+// Refit ink once the bundled fonts replace the initial fallback metrics.
+document.fonts.ready.then(() => { repeatNode(); paintEdges(); });
 function download(name,content,type){const blob=new Blob([content],{type}),url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);}
 
 

@@ -8,6 +8,7 @@ fs.mkdirSync(path.join(dist, 'assets'), { recursive: true });
 for (const f of ['index.html', 'assets/styles.css', 'assets/app.js']) {
   fs.copyFileSync(path.join(root, f), path.join(dist, f));
 }
+fs.cpSync(path.join(root, 'assets/fonts'), path.join(dist, 'assets/fonts'), { recursive: true });
 fs.cpSync(path.join(root, 'assets/images'), path.join(dist, 'assets/images'), { recursive: true });
 fs.cpSync(path.join(root, 'assets/print'), path.join(dist, 'assets/print'), { recursive: true });
 fs.cpSync(path.join(root, 'assets/vendor'), path.join(dist, 'assets/vendor'), { recursive: true });

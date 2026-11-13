@@ -188,6 +188,8 @@ export async function createPrintScene(view) {
       image = new Image(); image.src = design.logo;
       try { await image.decode(); } catch { image = null; }
     }
+    try { await document.fonts.load('800 24px "Logokat Inter"', design.brand || 'ЛОГОКАТ'); }
+    catch { /* The browser fallback also keeps printing available offline. */ }
     if (version !== designVersion) return;
     inkCtx.clearRect(0, 0, inkCanvas.width, inkCanvas.height);
     const px = inkCanvas.width / W, py = inkCanvas.height / D;
@@ -204,9 +206,9 @@ export async function createPrintScene(view) {
     inkCtx.textAlign = 'center'; inkCtx.textBaseline = 'middle';
     const label = image ? design.brand.trim() : design.brand || 'ЛОГОКАТ';
     let fontSize = band * .8;
-    inkCtx.font = `800 ${fontSize}px Arial, sans-serif`;
+    inkCtx.font = `800 ${fontSize}px "Logokat Inter", sans-serif`;
     fontSize *= Math.min(1, repeat * (image && label ? .48 : .83) / (inkCtx.measureText(label).width || 1));
-    inkCtx.font = `800 ${fontSize}px Arial, sans-serif`;
+    inkCtx.font = `800 ${fontSize}px "Logokat Inter", sans-serif`;
     for (let x = printStart + repeat / 2; x < printEnd; x += repeat) {
       if (image) {
         const ratio = Math.min(repeat * (label ? .28 : .82) / image.naturalWidth, band * .78 / image.naturalHeight);
